@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import br.com.codaedorme.pi.model.Grupo;
 import br.com.codaedorme.pi.model.Status;
 import br.com.codaedorme.pi.model.Usuario;
 import br.com.codaedorme.pi.repository.UsuarioRepository;
@@ -26,6 +27,7 @@ public class PiApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		menu();
+		SCANNER.close();
 	}
 
 	private void menu() {
@@ -68,8 +70,10 @@ public class PiApplication implements CommandLineRunner {
 		System.out.println("Digite o Cpf do usuario:");
 		usuario.setCpf(SCANNER.next());
 
-		System.out.println("Digite o grupo do usuario:");
-		usuario.setGrupo(SCANNER.next());
+		System.out.println("Digite o grupo do usuario (ADMINISTRADOR, ESTOQUISTA):");
+		String grupoInput = SCANNER.next().toUpperCase();
+		Grupo grupo = Grupo.valueOf(grupoInput);
+		usuario.setGrupo(grupo);
 
 		System.out.println("Digite o senha do usuario:");
 		usuario.setSenha(SCANNER.next());

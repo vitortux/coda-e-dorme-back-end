@@ -1,6 +1,8 @@
 package br.com.codaedorme.pi.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,13 +17,21 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
+
     @Email
     private String email;
+
     @Pattern(regexp = "^\\d{11}$")
     private String cpf;
-    private String grupo;
+
+    @Enumerated(EnumType.STRING)
+    private Grupo grupo;
+
     private String senha;
+
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public Long getId() {
@@ -56,11 +66,11 @@ public class Usuario {
         this.cpf = cpf;
     }
 
-    public String getGrupo() {
+    public Grupo getGrupo() {
         return grupo;
     }
 
-    public void setGrupo(String grupo) {
+    public void setGrupo(Grupo grupo) {
         this.grupo = grupo;
     }
 
@@ -79,5 +89,4 @@ public class Usuario {
     public void setStatus(Status status) {
         this.status = status;
     }
-
 }
