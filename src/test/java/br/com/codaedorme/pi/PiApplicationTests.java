@@ -1,10 +1,10 @@
-package com.demo.demo;
+package br.com.codaedorme.pi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DemoApplicationTests {
+class PiApplicationTests {
 
 	@Test
 	void contextLoads() {

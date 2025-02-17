@@ -1,4 +1,4 @@
-package com.demo.demo;
+package br.com.codaedorme.pi;
 
 import java.util.Scanner;
 
@@ -7,26 +7,25 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.demo.demo.model.Status;
-import com.demo.demo.model.Usuario;
-import com.demo.demo.repository.UsuarioRepository;
+import br.com.codaedorme.pi.model.Status;
+import br.com.codaedorme.pi.model.Usuario;
+import br.com.codaedorme.pi.repository.UsuarioRepository;
 
 @SpringBootApplication
-public class DemoApplication implements CommandLineRunner {
+public class PiApplication implements CommandLineRunner {
 
-	private final Scanner SCANNER = new Scanner(System.in);
+	private static final Scanner SCANNER = new Scanner(System.in);
 
 	@Autowired
 	private UsuarioRepository repository;
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(PiApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
 		menu();
-
 	}
 
 	private void menu() {
@@ -53,12 +52,10 @@ public class DemoApplication implements CommandLineRunner {
 					System.out.println("Essa opcao nao existe");
 					break;
 			}
-
 		}
 	}
 
 	private void cadastrar() {
-
 		System.out.println("------ Cadastro ------\n2");
 		Usuario usuario = new Usuario();
 
@@ -81,5 +78,4 @@ public class DemoApplication implements CommandLineRunner {
 
 		repository.save(usuario);
 	}
-
 }

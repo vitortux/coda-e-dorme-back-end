@@ -1,4 +1,4 @@
-package com.demo.demo.model;
+package br.com.codaedorme.pi.model;
 
 public enum Status {
     ATIVO, INATIVO

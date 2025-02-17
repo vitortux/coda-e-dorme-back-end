@@ -1,4 +1,4 @@
-package com.demo.demo.model;
+package br.com.codaedorme.pi.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
