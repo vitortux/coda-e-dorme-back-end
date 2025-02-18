@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import br.com.codaedorme.pi.model.Grupo;
 import br.com.codaedorme.pi.model.Status;
 import br.com.codaedorme.pi.model.Usuario;
+import br.com.codaedorme.pi.model.usuarioModel.CriptografaSenha;
+import br.com.codaedorme.pi.model.usuarioModel.ValidaSenhas;
 import br.com.codaedorme.pi.repository.UsuarioRepository;
 
 @SpringBootApplication
@@ -76,10 +78,27 @@ public class PiApplication implements CommandLineRunner {
 		usuario.setGrupo(grupo);
 
 		System.out.println("Digite o senha do usuario:");
-		usuario.setSenha(SCANNER.next());
+		String senha1 = SCANNER.next();
+
+		System.out.println("Digite novamente a senha do usuario:");
+		String senha2 = SCANNER.next();
+
+		ValidaSenhas validador = new ValidaSenhas();
+
+		if (validador.validaSenhas(senha1, senha2) == true) {
+			String resSenha = senha1;
+			CriptografaSenha crip = new CriptografaSenha();
+			String senhacriptografada = crip.criptografar(resSenha);
+			usuario.setSenha(senhacriptografada);
+		} else {
+			System.out.println("Senha nao compativeis!");
+			return;
+		}
 
 		usuario.setStatus(Status.ATIVO);
 
 		repository.save(usuario);
+
+		System.out.println(usuario.getSenha());
 	}
 }
