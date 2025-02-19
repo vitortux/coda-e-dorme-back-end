@@ -1,5 +1,7 @@
 package br.com.codaedorme.pi.domain.usuario;
 
+import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
+import br.com.codaedorme.pi.domain.usuario.enums.Status;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,79 +16,86 @@ import jakarta.validation.constraints.Pattern;
 @Table(name = "Usuario")
 public class Usuario {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String nome;
+	private String nome;
 
-    @Email
-    private String email;
+	@Email
+	private String email;
 
-    @Pattern(regexp = "^\\d{11}$")
-    private String cpf;
+	@Pattern(regexp = "^\\d{11}$")
+	private String cpf;
 
-    @Enumerated(EnumType.STRING)
-    private Grupo grupo;
+	@Enumerated(EnumType.STRING)
+	private Grupo grupo;
 
-    private String senha;
+	private String senha;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getCpf() {
-        return cpf;
-    }
+	public String getCpf() {
+		return cpf;
+	}
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
 
-    public Grupo getGrupo() {
-        return grupo;
-    }
+	public Grupo getGrupo() {
+		return grupo;
+	}
 
-    public void setGrupo(Grupo grupo) {
-        this.grupo = grupo;
-    }
+	public void setGrupo(Grupo grupo) {
+		this.grupo = grupo;
+	}
 
-    public String getSenha() {
-        return senha;
-    }
+	public String getSenha() {
+		return senha;
+	}
 
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 
-    public Status getStatus() {
-        return status;
-    }
+	public Status getStatus() {
+		return status;
+	}
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nome=" + nome + ", email=" + email + ", cpf=" + cpf + ", grupo=" + grupo
+				+ ", senha=" + senha + ", status=" + status + "]";
+	}
+
 }
