@@ -8,7 +8,7 @@ mvnw
 .gitattributes
 mvnw.cmd
 
-### STS ###
+### STS ##
 .apt_generated
 .classpath
 .factorypath
