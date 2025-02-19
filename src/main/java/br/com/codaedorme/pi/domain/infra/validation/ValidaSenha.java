@@ -1,9 +1,11 @@
-package br.com.codaedorme.pi.domain.usuario;
+package br.com.codaedorme.pi.domain.infra.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import br.com.codaedorme.pi.domain.usuario.Usuario;
+import br.com.codaedorme.pi.domain.usuario.UsuarioRepository;
 
 @Service
 public class ValidaSenha {
