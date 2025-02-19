@@ -1,4 +1,4 @@
-package br.com.codaedorme.pi.model;
+package br.com.codaedorme.pi.domain.usuario;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

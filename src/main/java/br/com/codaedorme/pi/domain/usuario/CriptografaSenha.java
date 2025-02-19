@@ -1,4 +1,4 @@
-package br.com.codaedorme.pi.model.usuarioModel;
+package br.com.codaedorme.pi.domain.usuario;
 
 import org.springframework.stereotype.Service;
 

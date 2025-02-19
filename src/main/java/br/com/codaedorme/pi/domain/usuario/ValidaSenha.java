@@ -1,29 +1,22 @@
-package br.com.codaedorme.pi.model.usuarioModel;
+package br.com.codaedorme.pi.domain.usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import br.com.codaedorme.pi.model.Usuario;
-import br.com.codaedorme.pi.repository.UsuarioRepository;
 
 @Service
-public class ValidaSenhas {
+public class ValidaSenha {
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuarioRepository repository;
 
     public boolean validaSenhas(String senha1, String senha2) {
-
-        if (senha1.equals(senha2)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (senha1.equals(senha2));
     }
 
-    public boolean validaHash(String senhaRecebida, Long usuarioID) {
-        Usuario usuario = usuarioRepository.findById(usuarioID).orElse(null);
+    public boolean validaHash(String senhaRecebida, Long usuarioId) {
+        Usuario usuario = repository.findById(usuarioId).orElse(null);
 
         if (usuario == null) {
             return false;

@@ -7,12 +7,12 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import br.com.codaedorme.pi.model.Grupo;
-import br.com.codaedorme.pi.model.Status;
-import br.com.codaedorme.pi.model.Usuario;
-import br.com.codaedorme.pi.model.usuarioModel.CriptografaSenha;
-import br.com.codaedorme.pi.model.usuarioModel.ValidaSenhas;
-import br.com.codaedorme.pi.repository.UsuarioRepository;
+import br.com.codaedorme.pi.domain.usuario.CriptografaSenha;
+import br.com.codaedorme.pi.domain.usuario.Grupo;
+import br.com.codaedorme.pi.domain.usuario.Status;
+import br.com.codaedorme.pi.domain.usuario.Usuario;
+import br.com.codaedorme.pi.domain.usuario.UsuarioRepository;
+import br.com.codaedorme.pi.domain.usuario.ValidaSenha;
 
 @SpringBootApplication
 public class PiApplication implements CommandLineRunner {
@@ -83,9 +83,9 @@ public class PiApplication implements CommandLineRunner {
 		System.out.println("Digite novamente a senha do usuario:");
 		String senha2 = SCANNER.next();
 
-		ValidaSenhas validador = new ValidaSenhas();
+		ValidaSenha validador = new ValidaSenha();
 
-		if (validador.validaSenhas(senha1, senha2) == true) {
+		if (validador.validaSenhas(senha1, senha2)) {
 			String resSenha = senha1;
 			CriptografaSenha crip = new CriptografaSenha();
 			String senhacriptografada = crip.criptografar(resSenha);
