@@ -3,8 +3,8 @@ package br.com.codaedorme.pi.domain.usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.codaedorme.pi.domain.infra.criptografia.CriptografaSenha;
-import br.com.codaedorme.pi.domain.infra.validation.ValidaSenha;
+import br.com.codaedorme.pi.infra.criptografia.CriptografaSenha;
+import br.com.codaedorme.pi.infra.validation.ValidaSenha;
 
 @Service
 public class UsuarioService {
@@ -27,5 +27,9 @@ public class UsuarioService {
 			System.out.println("Senha nao compativeis!");
 			return null;
 		}
+	}
+
+	public Usuario[] findAll() {
+		return repository.findAll().toArray(new Usuario[0]);
 	}
 }
