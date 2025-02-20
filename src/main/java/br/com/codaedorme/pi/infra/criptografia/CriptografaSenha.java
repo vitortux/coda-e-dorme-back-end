@@ -1,4 +1,4 @@
-package br.com.codaedorme.pi.domain.infra.criptografia;
+package br.com.codaedorme.pi.infra.criptografia;
 
 import org.springframework.stereotype.Service;
 

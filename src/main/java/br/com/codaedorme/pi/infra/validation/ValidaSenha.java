@@ -1,4 +1,4 @@
-package br.com.codaedorme.pi.domain.infra.validation;
+package br.com.codaedorme.pi.infra.validation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
