@@ -1,5 +1,6 @@
 package br.com.codaedorme.pi;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,6 +10,7 @@ import br.com.codaedorme.pi.domain.usuario.UsuarioMenu;
 @SpringBootApplication
 public class PiApplication implements CommandLineRunner {
 
+	@Autowired
 	private UsuarioMenu menu;
 
 	public static void main(String[] args) {
