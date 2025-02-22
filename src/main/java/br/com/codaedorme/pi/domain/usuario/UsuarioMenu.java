@@ -3,10 +3,13 @@ package br.com.codaedorme.pi.domain.usuario;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Component;
 
 import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
 import br.com.codaedorme.pi.domain.usuario.enums.Status;
 
+@Component
 public class UsuarioMenu {
 	private static final Scanner SCANNER = new Scanner(System.in);
 
@@ -24,53 +27,61 @@ public class UsuarioMenu {
 			SCANNER.nextLine();
 
 			switch (escolha) {
-			case 1:
-				System.out.println("------ Login ------");
-				break;
-			case 2:
-				cadastrar();
-				break;
-			case 3:
-				listarUsuarios();
-				break;
-			case 4:
-				System.out.println("------ Tchau até mais ------");
-				rodando = false;
-				break;
-			default:
-				System.out.println("Essa opcao nao existe");
-				break;
+				case 1:
+					System.out.println("------ Login ------");
+					break;
+				case 2:
+					cadastrar();
+					break;
+				case 3:
+					listarUsuarios();
+					break;
+				case 4:
+					System.out.println("------ Tchau até mais ------");
+					rodando = false;
+					break;
+				default:
+					System.out.println("Essa opcao nao existe");
+					break;
 			}
 		}
 	}
 
 	private void cadastrar() {
-		System.out.println("------ Cadastro ------\n");
-		Usuario usuario = new Usuario();
+		try {
+			System.out.println("------ Cadastro ------\n");
+			Usuario usuario = new Usuario();
 
-		System.out.println("Digite o Nome do usuario:");
-		usuario.setNome(SCANNER.nextLine());
+			System.out.println("Digite o Nome do usuario:");
+			usuario.setNome(SCANNER.nextLine());
 
-		System.out.println("Digite o Email do usuario:");
-		usuario.setEmail(SCANNER.nextLine());
+			System.out.println("Digite o Email do usuario:");
+			usuario.setEmail(SCANNER.nextLine());
 
-		System.out.println("Digite o Cpf do usuario:");
-		usuario.setCpf(SCANNER.nextLine());
+			System.out.println("Digite o Cpf do usuario:");
+			usuario.setCpf(SCANNER.nextLine());
 
-		System.out.println("Digite o grupo do usuario (ADMINISTRADOR, ESTOQUISTA):");
-		String grupoInput = SCANNER.nextLine().toUpperCase();
-		Grupo grupo = Grupo.valueOf(grupoInput);
-		usuario.setGrupo(grupo);
+			System.out.println("Digite o grupo do usuario (ADMINISTRADOR, ESTOQUISTA):");
+			String grupoInput = SCANNER.nextLine().toUpperCase();
+			Grupo grupo = Grupo.valueOf(grupoInput);
+			usuario.setGrupo(grupo);
 
-		System.out.println("Digite o senha do usuario:");
-		usuario.setSenha(SCANNER.nextLine());
+			System.out.println("Digite o senha do usuario:");
+			usuario.setSenha(SCANNER.nextLine());
 
-		System.out.println("Digite novamente a senha do usuario:");
-		String senha2 = SCANNER.nextLine();
+			System.out.println("Digite novamente a senha do usuario:");
+			String senha2 = SCANNER.nextLine();
 
-		usuario.setStatus(Status.ATIVO);
+			usuario.setStatus(Status.ATIVO);
 
-		System.out.println("Usuário \"" + service.save(usuario, senha2).getNome() + "\" salvo com sucesso.");
+			service.save(usuario, senha2);
+		} catch (DataIntegrityViolationException e) {
+			System.out.println("Email já cadastrado no banco de dados!");
+		} catch (IllegalArgumentException e) {
+			System.out.println("Digite um dado valido!");
+		} catch (Exception e) {
+			System.out.println("Erro inesperado: " + e.getMessage());
+		}
 	}
 
 	private void listarUsuarios() {
@@ -96,18 +107,18 @@ public class UsuarioMenu {
 			SCANNER.nextLine();
 
 			switch (opcao) {
-			case 1:
-				cadastrar();
-				break;
-			case 2:
-//				opcoesUsuario();
-				break;
-			case 0:
-				menu();
-				break;
-			default:
-				System.out.println("Essa opção não existe");
-				break;
+				case 1:
+					cadastrar();
+					break;
+				case 2:
+					// opcoesUsuario();
+					break;
+				case 0:
+					menu();
+					break;
+				default:
+					System.out.println("Essa opção não existe");
+					break;
 			}
 		}
 	}
