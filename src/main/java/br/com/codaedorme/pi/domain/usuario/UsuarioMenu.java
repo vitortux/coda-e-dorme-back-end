@@ -65,8 +65,10 @@ public class UsuarioMenu {
 				alterarDadoUsuario(id);
 				break;
 			case 3:
+				alterarStatus(id);
 				break;
 			case 4:
+				opcoesListar();
 				break;
 			default:
 				break;
@@ -231,6 +233,34 @@ public class UsuarioMenu {
 			System.out.println("O CPF deve possuir um formato válido!");
 		} catch (IllegalArgumentException e) {
 			System.out.println("Digite um dado valido!");
+		} catch (Exception e) {
+			System.out.println("Erro inesperado: " + e.getMessage());
+		}
+	}
+
+	private void alterarStatus(Long id) {
+		try {
+			Usuario usuario = service.findById(id);
+			usuario.toString();
+
+			String mensagem = usuario.getStatus().equals(Status.ATIVO)
+					? "Deseja desativar o usuário? (Y/N)"
+					: "Deseja ativar o usuário? (Y/N)";
+
+			System.out.println(mensagem);
+			String confirmacao = SCANNER.nextLine();
+
+			if (confirmacao.equalsIgnoreCase("Y")) {
+				service.alterarStatus(usuario);
+				System.out.println("Status alterado com sucesso!");
+			} else if (!confirmacao.equalsIgnoreCase("N")) {
+				System.out.println("Opção inválida!");
+			} else {
+				System.out.println("Status não alterado!");
+				opcoesAlteracaoUsuario(id);
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Usuario não encontrado!");
 		} catch (Exception e) {
 			System.out.println("Erro inesperado: " + e.getMessage());
 		}

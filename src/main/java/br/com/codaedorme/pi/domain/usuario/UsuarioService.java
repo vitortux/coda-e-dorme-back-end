@@ -3,6 +3,7 @@ package br.com.codaedorme.pi.domain.usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.codaedorme.pi.domain.usuario.enums.Status;
 import br.com.codaedorme.pi.infra.criptografia.CriptografaSenha;
 import br.com.codaedorme.pi.infra.validation.ValidaSenha;
 
@@ -43,5 +44,10 @@ public class UsuarioService {
 
 	public Usuario alter(Usuario usuario) {
 		return repository.save(usuario);
+	}
+
+	public void alterarStatus(Usuario usuario) {
+		usuario.setStatus(usuario.getStatus().equals(Status.ATIVO) ? Status.INATIVO : Status.ATIVO);
+		repository.save(usuario);
 	}
 }
