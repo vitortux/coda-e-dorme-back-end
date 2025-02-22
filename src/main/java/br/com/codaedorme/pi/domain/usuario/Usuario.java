@@ -94,11 +94,18 @@ public class Usuario {
 		this.status = status;
 	}
 
-	@Override
 	public String toString() {
 		return id + " | " + nome + " | " + email +
 				" | " + cpf + " | " + senha + " | " + grupo +
 				" | " + status;
+	}
+
+	public String toString2() {
+
+		return id + " | " + nome + " | " + email +
+				" | " + senha + " | " + grupo +
+				" | " + status;
+
 	}
 
 }

@@ -51,6 +51,53 @@ public class UsuarioMenu {
 		}
 	}
 
+	private void opcoesAlteracaoUsuario(int id) {
+		System.out.println(
+				"1 - Alterar usuário\n2 - Alterar senha \n3 - Ativar/Desativar\n4 - voltar a listar usuário");
+		int opcao2 = SCANNER.nextInt();
+
+		switch (opcao2) {
+			case 1:
+				break;
+			case 2:
+				alterarDadoUsuario(id);
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void opcoesListar() {
+		while (true) {
+			System.out.println("\n1 - Adicionar usuário\n2 - Selecionar usuário\n0 - Voltar para o inicio");
+
+			int opcao = SCANNER.nextInt();
+			SCANNER.nextLine();
+
+			switch (opcao) {
+				case 1:
+					cadastrar();
+					break;
+				case 2:
+					System.out.println("Digite o id do usuario:");
+					int id = SCANNER.nextInt();
+					opcoesAlteracaoUsuario(id);
+					break;
+				case 0:
+					menu();
+					break;
+				default:
+					System.out.println("Essa opção não existe");
+					break;
+			}
+		}
+
+	}
+
 	private void cadastrar() {
 		try {
 			System.out.println("------ Cadastro ------\n");
@@ -97,7 +144,7 @@ public class UsuarioMenu {
 			System.out.println("Nenhum usuário cadastrado.");
 		} else {
 			for (Usuario usuario : usuarios) {
-				System.out.println(usuario.toString());
+				System.out.println(usuario.toString2());
 			}
 		}
 		opcoesListar();
@@ -112,7 +159,7 @@ public class UsuarioMenu {
 		}
 	}
 
-	private void alterarSenha(int id) {
+	private void alterarDadoUsuario(int id) {
 		listarUsuarioSelecionado(id);
 		Usuario usuario = service.findById(id);
 
@@ -133,7 +180,7 @@ public class UsuarioMenu {
 		System.out.println("Digite a nova senha:");
 		String senhaNova = SCANNER.next();
 
-		System.out.println("Digite a nova senha:");
+		System.out.println("Digite a nova senha novamente:");
 		String senhaNova2 = SCANNER.next();
 
 		if (!validador.validaSenhas(senhaNova, senhaNova2)) {
@@ -155,31 +202,8 @@ public class UsuarioMenu {
 
 	}
 
-	private void opcoesListar() {
-		while (true) {
-			System.out.println("\n1 - Adicionar usuário\n2 - Selecionar usuário\n0 - Voltar para o inicio");
-
-			int opcao = SCANNER.nextInt();
-			SCANNER.nextLine();
-
-			switch (opcao) {
-				case 1:
-					cadastrar();
-					break;
-				case 2:
-					System.out.println("Digite o id do usuario:");
-					int id = SCANNER.nextInt();
-					alterarSenha(id);
-					break;
-				case 0:
-					menu();
-					break;
-				default:
-					System.out.println("Essa opção não existe");
-					break;
-			}
-		}
-
+	// TODO: Implementar método para alterar usuário
+	private void alterarUsuario(int id) {
 	}
 
 }
