@@ -94,15 +94,18 @@ public class Usuario {
 		this.status = status;
 	}
 
-	@Override
 	public String toString() {
-		return String.format("ID: %d | Nome: %s | Email: %s | CPF: %s | Grupo: %s | Status: %s", id, nome, email, cpf,
-				grupo, status);
+		return id + " | " + nome + " | " + email +
+				" | " + cpf + " | " + senha + " | " + grupo +
+				" | " + status;
 	}
 
 	public String toString2() {
-		return String.format("ID: %d | Nome: %s | Email: %s | Grupo: %s | Status: %s", id, nome, email, cpf, grupo,
-				status);
+
+		return id + " | " + nome + " | " + email +
+				" | " + senha + " | " + grupo +
+				" | " + status;
+
 	}
 
 }
