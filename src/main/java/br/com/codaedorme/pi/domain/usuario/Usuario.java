@@ -2,6 +2,7 @@ package br.com.codaedorme.pi.domain.usuario;
 
 import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
 import br.com.codaedorme.pi.domain.usuario.enums.Status;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,6 +24,7 @@ public class Usuario {
 	private String nome;
 
 	@Email
+	@Column(unique = true)
 	private String email;
 
 	@Pattern(regexp = "^\\d{11}$")

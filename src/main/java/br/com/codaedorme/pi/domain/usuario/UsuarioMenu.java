@@ -3,6 +3,7 @@ package br.com.codaedorme.pi.domain.usuario;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
@@ -47,62 +48,40 @@ public class UsuarioMenu {
 	}
 
 	private void cadastrar() {
-		System.out.println("------ Cadastro ------\n");
-		Usuario usuario = new Usuario();
+		try {
+			System.out.println("------ Cadastro ------\n");
+			Usuario usuario = new Usuario();
 
-		System.out.println("Digite o Nome do usuario:");
-		usuario.setNome(SCANNER.nextLine());
+			System.out.println("Digite o Nome do usuario:");
+			usuario.setNome(SCANNER.nextLine());
 
-		boolean emailValido = false;
-		while (!emailValido) {
-			try {
-				System.out.println("Digite o Email do usuario:");
-				String email = SCANNER.nextLine();
+			System.out.println("Digite o Email do usuario:");
+			usuario.setEmail(SCANNER.nextLine());
 
-				if (!email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) {
-					throw new IllegalArgumentException("Email inválido.");
-				}
-				usuario.setEmail(email);
-				emailValido = true;
-			} catch (IllegalArgumentException e) {
-				System.err.println("Erro de validação: " + e.getMessage());
-				System.out.println("Por favor, insira um email válido.");
-			}
+			System.out.println("Digite o Cpf do usuario:");
+			usuario.setCpf(SCANNER.nextLine());
+
+			System.out.println("Digite o grupo do usuario (ADMINISTRADOR, ESTOQUISTA):");
+			String grupoInput = SCANNER.nextLine().toUpperCase();
+			Grupo grupo = Grupo.valueOf(grupoInput);
+			usuario.setGrupo(grupo);
+
+			System.out.println("Digite o senha do usuario:");
+			usuario.setSenha(SCANNER.nextLine());
+
+			System.out.println("Digite novamente a senha do usuario:");
+			String senha2 = SCANNER.nextLine();
+
+			usuario.setStatus(Status.ATIVO);
+
+			service.save(usuario, senha2);
+		} catch (DataIntegrityViolationException e) {
+			System.out.println("Email já cadastrado no banco de dados!");
+		} catch (IllegalArgumentException e) {
+			System.out.println("Digite um dado valido!");
+		} catch (Exception e) {
+			System.out.println("Erro inesperado: " + e.getMessage());
 		}
-
-		boolean cpfValido = false;
-		while (!cpfValido) {
-			try {
-				System.out.println("Digite o Cpf do usuario:");
-				String cpf = SCANNER.nextLine();
-
-				if (!cpf.matches("^\\d{11}$")) {
-					throw new IllegalArgumentException("CPF inválido. Deve conter 11 dígitos numéricos.");
-				}
-				usuario.setCpf(cpf);
-				cpfValido = true;
-			} catch (IllegalArgumentException e) {
-				System.err.println("Erro de validação: " + e.getMessage());
-				System.out.println("Por favor, insira um CPF válido.");
-			}
-		}
-
-		System.out.println("Digite o grupo do usuario (ADMINISTRADOR, ESTOQUISTA):");
-		String grupoInput = SCANNER.nextLine().toUpperCase();
-		Grupo grupo = Grupo.valueOf(grupoInput);
-		usuario.setGrupo(grupo);
-
-		System.out.println("Digite a senha do usuario:");
-		usuario.setSenha(SCANNER.nextLine());
-
-		System.out.println("Digite novamente a senha do usuario:");
-		String senha2 = SCANNER.nextLine();
-
-		usuario.setStatus(Status.ATIVO);
-
-		// Salva o usuário
-		service.save(usuario, senha2);
-
 	}
 
 	private void listarUsuarios() {
