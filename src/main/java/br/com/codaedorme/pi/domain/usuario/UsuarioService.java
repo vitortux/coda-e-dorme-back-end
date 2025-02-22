@@ -1,7 +1,5 @@
 package br.com.codaedorme.pi.domain.usuario;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +19,6 @@ public class UsuarioService {
 	private CriptografaSenha crip;
 
 	public Usuario save(Usuario usuario, String senha2) {
-
 		if (validador.validaSenhas(usuario.getSenha(), senha2)) {
 			usuario.setSenha(crip.criptografar(usuario.getSenha()));
 			return repository.save(usuario);
@@ -36,8 +33,8 @@ public class UsuarioService {
 		return repository.save(usuario);
 	}
 
-	public Usuario findById(int id) {
-		return repository.findById((long) id).orElse(null);
+	public Usuario findById(Long id) {
+		return repository.findById(id).orElse(null);
 	}
 
 	public Usuario[] findAll() {
@@ -47,5 +44,4 @@ public class UsuarioService {
 	public Usuario alter(Usuario usuario) {
 		return repository.save(usuario);
 	}
-
 }

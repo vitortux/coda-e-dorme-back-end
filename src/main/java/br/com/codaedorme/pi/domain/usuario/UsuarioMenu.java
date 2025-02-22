@@ -1,6 +1,5 @@
 package br.com.codaedorme.pi.domain.usuario;
 
-import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +50,16 @@ public class UsuarioMenu {
 		}
 	}
 
-	private void opcoesAlteracaoUsuario(int id) {
+	private void opcoesAlteracaoUsuario(Long id) {
 		System.out.println(
 				"1 - Alterar usuário\n2 - Alterar senha \n3 - Ativar/Desativar\n4 - voltar a listar usuário");
-		int opcao2 = SCANNER.nextInt();
 
-		switch (opcao2) {
+		int opcao = SCANNER.nextInt();
+		SCANNER.nextLine();
+
+		switch (opcao) {
 			case 1:
+				alterarUsuario(id);
 				break;
 			case 2:
 				alterarDadoUsuario(id);
@@ -72,30 +74,27 @@ public class UsuarioMenu {
 	}
 
 	private void opcoesListar() {
-		while (true) {
-			System.out.println("\n1 - Adicionar usuário\n2 - Selecionar usuário\n0 - Voltar para o inicio");
+		System.out.println("\n1 - Adicionar usuário\n2 - Selecionar usuário\n0 - Voltar para o inicio");
 
-			int opcao = SCANNER.nextInt();
-			SCANNER.nextLine();
+		int opcao = Integer.parseInt(SCANNER.nextLine());
 
-			switch (opcao) {
-				case 1:
-					cadastrar();
-					break;
-				case 2:
-					System.out.println("Digite o id do usuario:");
-					int id = SCANNER.nextInt();
-					opcoesAlteracaoUsuario(id);
-					break;
-				case 0:
-					menu();
-					break;
-				default:
-					System.out.println("Essa opção não existe");
-					break;
-			}
+		switch (opcao) {
+			case 1:
+				cadastrar();
+				break;
+			case 2:
+				System.out.println("Digite o id do usuario:");
+				Long id = SCANNER.nextLong();
+				opcoesAlteracaoUsuario(id);
+				break;
+			case 0:
+				menu();
+				break;
+			default:
+				System.out.println("Essa opção não existe");
+				opcoesListar();
+				break;
 		}
-
 	}
 
 	private void cadastrar() {
@@ -150,8 +149,8 @@ public class UsuarioMenu {
 		opcoesListar();
 	}
 
-	private void listarUsuarioSelecionado(int id) {
-		Usuario usuario = service.findById(id); // Usando o id correto do usuário
+	private void listarUsuarioSelecionado(Long id) {
+		Usuario usuario = service.findById(id);
 		if (usuario != null) {
 			System.out.println(usuario.toString());
 		} else {
@@ -159,13 +158,12 @@ public class UsuarioMenu {
 		}
 	}
 
-	private void alterarDadoUsuario(int id) {
+	private void alterarDadoUsuario(Long id) {
 		listarUsuarioSelecionado(id);
 		Usuario usuario = service.findById(id);
 
 		if (usuario == null) {
 			System.out.println("Usuario nao encontrado!");
-			return;
 		}
 		System.out.println("Digite a senha antiga:");
 		String senhaAntiga = SCANNER.next();
@@ -187,7 +185,6 @@ public class UsuarioMenu {
 			System.out.println("Senhas não compativeis!");
 			return;
 		}
-		;
 
 		System.out.println("Deseja salvar a senha? (S/N):");
 		String confirmacao = SCANNER.next();
@@ -199,11 +196,43 @@ public class UsuarioMenu {
 			service.alterarSenha(usuario, senhaNova);
 			System.out.println("Senha alterada com sucesso!");
 		}
-
 	}
 
-	// TODO: Implementar método para alterar usuário
-	private void alterarUsuario(int id) {
-	}
+	private void alterarUsuario(Long id) {
+		try {
+			Usuario usuario = service.findById(id);
+			usuario.toString();
 
+			System.out.println("Digite o nome do usuario:");
+			usuario.setNome(SCANNER.nextLine());
+
+			System.out.println("Digite o CPF do usuario:");
+			usuario.setCpf(SCANNER.nextLine());
+
+			System.out.println("Digite o grupo do usuario (ADMINISTRADOR, ESTOQUISTA):");
+			String grupoInput = SCANNER.nextLine().toUpperCase();
+			Grupo grupo = Grupo.valueOf(grupoInput);
+			usuario.setGrupo(grupo);
+
+			System.out.println("Deseja persistir as alterações:? (S/N)");
+			String confirmacao = SCANNER.nextLine();
+
+			if (confirmacao.equalsIgnoreCase("S")) {
+				service.alter(usuario);
+				System.out.println("Alterações salvas com sucesso!");
+			} else if (!confirmacao.equalsIgnoreCase("N")) {
+				System.out.println("Opção inválida!");
+			} else {
+				System.out.println("Alterações não salvas!");
+			}
+		} catch (NullPointerException e) {
+			System.out.println("Usuario não encontrado!");
+		} catch (DataIntegrityViolationException e) {
+			System.out.println("O CPF deve possuir um formato válido!");
+		} catch (IllegalArgumentException e) {
+			System.out.println("Digite um dado valido!");
+		} catch (Exception e) {
+			System.out.println("Erro inesperado: " + e.getMessage());
+		}
+	}
 }
