@@ -1,5 +1,6 @@
 package br.com.codaedorme.pi.domain.usuario;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,13 @@ import org.springframework.stereotype.Component;
 
 import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
 import br.com.codaedorme.pi.domain.usuario.enums.Status;
+import br.com.codaedorme.pi.infra.validation.ValidaSenha;
 
 @Component
 public class UsuarioMenu {
 	private static final Scanner SCANNER = new Scanner(System.in);
+	@Autowired
+	ValidaSenha validador = new ValidaSenha();
 
 	@Autowired
 	private UsuarioService service;
@@ -93,10 +97,62 @@ public class UsuarioMenu {
 			System.out.println("Nenhum usuário cadastrado.");
 		} else {
 			for (Usuario usuario : usuarios) {
-				System.out.println(usuario.toString2());
+				System.out.println(usuario.toString());
 			}
 		}
 		opcoesListar();
+	}
+
+	private void listarUsuarioSelecionado(int id) {
+		Usuario usuario = service.findById(id); // Usando o id correto do usuário
+		if (usuario != null) {
+			System.out.println(usuario.toString());
+		} else {
+			System.out.println("Usuario nao encontrado!");
+		}
+	}
+
+	private void alterarSenha(int id) {
+		listarUsuarioSelecionado(id);
+		Usuario usuario = service.findById(id);
+
+		if (usuario == null) {
+			System.out.println("Usuario nao encontrado!");
+			return;
+		}
+		System.out.println("Digite a senha antiga:");
+		String senhaAntiga = SCANNER.next();
+
+		if (!validador.validaHash(senhaAntiga, usuario.getId())) {
+			System.out.println("Senha antiga incorreta!");
+			return;
+		}
+
+		System.out.println("Senha correta!");
+
+		System.out.println("Digite a nova senha:");
+		String senhaNova = SCANNER.next();
+
+		System.out.println("Digite a nova senha:");
+		String senhaNova2 = SCANNER.next();
+
+		if (!validador.validaSenhas(senhaNova, senhaNova2)) {
+			System.out.println("Senhas não compativeis!");
+			return;
+		}
+		;
+
+		System.out.println("Deseja salvar a senha? (S/N):");
+		String confirmacao = SCANNER.next();
+
+		if (confirmacao.equalsIgnoreCase("N")) {
+			System.out.println("Senha não alterada!");
+			return;
+		} else {
+			service.alterarSenha(usuario, senhaNova);
+			System.out.println("Senha alterada com sucesso!");
+		}
+
 	}
 
 	private void opcoesListar() {
@@ -111,7 +167,9 @@ public class UsuarioMenu {
 					cadastrar();
 					break;
 				case 2:
-					// opcoesUsuario();
+					System.out.println("Digite o id do usuario:");
+					int id = SCANNER.nextInt();
+					alterarSenha(id);
 					break;
 				case 0:
 					menu();
@@ -121,5 +179,7 @@ public class UsuarioMenu {
 					break;
 			}
 		}
+
 	}
+
 }

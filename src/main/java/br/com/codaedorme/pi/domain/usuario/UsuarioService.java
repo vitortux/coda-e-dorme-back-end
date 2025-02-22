@@ -1,5 +1,7 @@
 package br.com.codaedorme.pi.domain.usuario;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +31,21 @@ public class UsuarioService {
 		}
 	}
 
+	public Usuario alterarSenha(Usuario usuario, String senhaNova) {
+		usuario.setSenha(crip.criptografar(senhaNova));
+		return repository.save(usuario);
+	}
+
+	public Usuario findById(int id) {
+		return repository.findById((long) id).orElse(null);
+	}
+
 	public Usuario[] findAll() {
 		return repository.findAll().toArray(new Usuario[0]);
 	}
+
+	public Usuario alter(Usuario usuario) {
+		return repository.save(usuario);
+	}
+
 }
