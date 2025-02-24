@@ -38,6 +38,33 @@ public class UsuarioMenu {
 					listarUsuarios();
 					break;
 				case 3:
+					System.out.println("------ Finalizando sessão! Até mais! ------");
+					rodando = false;
+					break;
+				default:
+					System.out.println("Essa opcao nao existe");
+					break;
+			}
+		}
+	}
+
+	public void inicio(){
+		inicializarUsuarioAdministrador();
+
+		boolean rodando = true;
+		int escolha;
+		String menu = "1 - Login\n2 - Desligar";
+
+		while (rodando) {
+			System.out.println(menu);
+			escolha = SCANNER.nextInt();
+			SCANNER.nextLine();
+
+			switch (escolha) {
+				case 1:
+					login();
+					break;
+				case 2:
 					System.out.println("------ Tchau até mais ------");
 					rodando = false;
 					break;
@@ -49,8 +76,6 @@ public class UsuarioMenu {
 	}
 
 	public void login() {
-		inicializarUsuarioAdministrador();
-
 		System.out.println("------ LOGIN ------");
 
 		System.out.println("Digite seu email:");

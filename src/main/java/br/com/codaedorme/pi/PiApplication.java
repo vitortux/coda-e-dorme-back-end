@@ -19,7 +19,7 @@ public class PiApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		menu.login();
+		menu.inicio();
 	}
 
 }
