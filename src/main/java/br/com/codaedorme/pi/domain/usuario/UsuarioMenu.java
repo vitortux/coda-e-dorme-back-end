@@ -1,5 +1,6 @@
 package br.com.codaedorme.pi.domain.usuario;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class UsuarioMenu {
 	public void menu() {
 		boolean rodando = true;
 		int escolha;
-		String menu = "1 - Login\n2 - Cadastrar usuario\n3 - Listar Usuários\n4 - Sair";
+		String menu = "1 - Cadastrar usuario\n2 - Listar Usuários\n3 - Sair";
 
 		while (rodando) {
 			System.out.println(menu);
@@ -31,15 +32,12 @@ public class UsuarioMenu {
 
 			switch (escolha) {
 				case 1:
-					System.out.println("------ Login ------");
-					break;
-				case 2:
 					cadastrar();
 					break;
-				case 3:
+				case 2:
 					listarUsuarios();
 					break;
-				case 4:
+				case 3:
 					System.out.println("------ Tchau até mais ------");
 					rodando = false;
 					break;
@@ -48,6 +46,29 @@ public class UsuarioMenu {
 					break;
 			}
 		}
+	}
+
+	public void login() {
+		inicializarUsuarioAdministrador();
+
+		System.out.println("------ LOGIN ------");
+
+		System.out.println("Digite seu email:");
+		String email = SCANNER.nextLine();
+
+		System.out.println("Digite sua senha:");
+		String senha = SCANNER.nextLine();
+
+		Optional<Usuario> usuario = service.login(email, senha);
+
+		if (usuario.isPresent()) {
+			System.out.println("\nLogin bem-sucedido! Bem vindo " + usuario.get().getNome());
+			menu();
+			return;
+		}
+
+		System.out.println("\nEmail ou senha incorretos. Tente novamente.");
+		login();
 	}
 
 	private void opcoesAlteracaoUsuario(Long id) {
@@ -262,6 +283,21 @@ public class UsuarioMenu {
 			System.out.println("Usuario não encontrado!");
 		} catch (Exception e) {
 			System.out.println("Erro inesperado: " + e.getMessage());
+		}
+	}
+
+	private void inicializarUsuarioAdministrador(){
+		if (service.findAll().length == 0) {
+			Grupo grupo = Grupo.valueOf("ADMINISTRADOR");
+			Usuario usuarioAdm = new Usuario();
+			usuarioAdm.setEmail("admin@admin");
+			usuarioAdm.setNome("Administrador");
+			usuarioAdm.setCpf("11111111111");
+			usuarioAdm.setGrupo(grupo);
+			usuarioAdm.setSenha("admin123");
+			usuarioAdm.setStatus(Status.ATIVO);
+
+			service.save(usuarioAdm, "admin123");
 		}
 	}
 }
