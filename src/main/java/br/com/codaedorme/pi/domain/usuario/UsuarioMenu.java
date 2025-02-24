@@ -90,8 +90,7 @@ public class UsuarioMenu {
 				opcoesAlteracaoUsuario(id);
 				break;
 			case 0:
-				menu();
-				break;
+				return;
 			default:
 				System.out.println("Essa opção não existe");
 				opcoesListar();
