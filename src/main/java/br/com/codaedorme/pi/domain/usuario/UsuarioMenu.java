@@ -20,12 +20,20 @@ public class UsuarioMenu {
 	@Autowired
 	private UsuarioService service;
 
+	@Autowired
+	private Session session;
+
 	public void menu() {
 		boolean rodando = true;
 		int escolha;
 		String menu = "1 - Cadastrar usuario\n2 - Listar Usuários\n3 - Sair";
 
 		while (rodando) {
+			System.out.println("DADOS DA SESSÃO: ");
+			System.out.println("Usuário: " + session.getUsuario().getNome()+
+					" | E-mail: " + session.getUsuario().getEmail() +
+					" | Grupo: " + session.getUsuario().getGrupo());
+
 			System.out.println(menu);
 			escolha = SCANNER.nextInt();
 			SCANNER.nextLine();
@@ -39,6 +47,7 @@ public class UsuarioMenu {
 					break;
 				case 3:
 					System.out.println("------ Finalizando sessão! Até mais! ------");
+					session.logout();
 					rodando = false;
 					break;
 				default:
@@ -86,13 +95,14 @@ public class UsuarioMenu {
 
 		Optional<Usuario> usuario = service.login(email, senha);
 
-		if (usuario.isPresent()) {
+		if (usuario.isPresent() && usuario.get().getStatus() == Status.ATIVO) {
 			System.out.println("\nLogin bem-sucedido! Bem vindo " + usuario.get().getNome());
+			session.setUsuario(usuario.get());
 			menu();
 			return;
 		}
 
-		System.out.println("\nEmail ou senha incorretos. Tente novamente.");
+		System.out.println("\nEmail ou senha incorretos, ou usuario inativo1. Tente novamente.");
 		login();
 	}
 
@@ -145,6 +155,10 @@ public class UsuarioMenu {
 	}
 
 	private void cadastrar() {
+		if(!isAdministrador()){
+			System.out.println("Apenas ADMs podem cadastrar usuarios.");
+			return;
+		}
 		try {
 			System.out.println("------ Cadastro ------\n");
 			Usuario usuario = new Usuario();
@@ -182,6 +196,11 @@ public class UsuarioMenu {
 	}
 
 	private void listarUsuarios() {
+		if(!isAdministrador()){
+			System.out.println("Apenas ADMs podem verificar e alterar usuarios.");
+			return;
+		}
+		
 		System.out.println("------ Lista de Usuários ------");
 
 		Usuario[] usuarios = service.findAll();
@@ -324,5 +343,9 @@ public class UsuarioMenu {
 
 			service.save(usuarioAdm, "admin123");
 		}
+	}
+
+	private boolean isAdministrador(){
+		return session.getUsuario().getGrupo() == Grupo.ADMINISTRADOR;
 	}
 }
