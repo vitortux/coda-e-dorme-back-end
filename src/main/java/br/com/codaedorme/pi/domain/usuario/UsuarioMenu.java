@@ -26,7 +26,7 @@ public class UsuarioMenu {
 	public void menu() {
 		boolean rodando = true;
 		int escolha;
-		String menu = "1 - Cadastrar usuario\n2 - Listar Usuários\n3 - Sair";
+		String menu = "1 - Listar Usuários\n3 - Sair";
 
 		while (rodando) {
 			System.out.println("DADOS DA SESSÃO: ");
@@ -40,9 +40,6 @@ public class UsuarioMenu {
 
 			switch (escolha) {
 				case 1:
-					cadastrar();
-					break;
-				case 2:
 					listarUsuarios();
 					break;
 				case 3:
@@ -200,7 +197,7 @@ public class UsuarioMenu {
 			System.out.println("Apenas ADMs podem verificar e alterar usuarios.");
 			return;
 		}
-		
+
 		System.out.println("------ Lista de Usuários ------");
 
 		Usuario[] usuarios = service.findAll();
