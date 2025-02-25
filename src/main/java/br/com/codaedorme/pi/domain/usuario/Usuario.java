@@ -103,7 +103,7 @@ public class Usuario {
 	public String toString2() {
 
 		return id + " | " + nome + " | " + email +
-				" | " + senha + " | " + grupo +
+				" | " + grupo +
 				" | " + status;
 
 	}

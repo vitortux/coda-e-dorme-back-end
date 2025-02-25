@@ -26,7 +26,7 @@ public class UsuarioMenu {
 	public void menu() {
 		boolean rodando = true;
 		int escolha;
-		String menu = "1 - Listar Usuários\n3 - Sair";
+		String menu = "2 - Listar Usuários\n3 - Sair";
 
 		while (rodando) {
 			System.out.println("DADOS DA SESSÃO: ");
@@ -39,7 +39,7 @@ public class UsuarioMenu {
 			SCANNER.nextLine();
 
 			switch (escolha) {
-				case 1:
+				case 2:
 					listarUsuarios();
 					break;
 				case 3:
@@ -104,6 +104,15 @@ public class UsuarioMenu {
 	}
 
 	private void opcoesAlteracaoUsuario(Long id) {
+
+		listarUsuarioSelecionado(id);
+		Usuario usuario = service.findById(id);
+
+		if (usuario == null) {
+			System.out.println("Usuario nao encontrado!");
+			return;
+		}
+
 		System.out.println(
 				"1 - Alterar usuário\n2 - Alterar senha \n3 - Ativar/Desativar\n4 - voltar a listar usuário");
 
@@ -121,7 +130,7 @@ public class UsuarioMenu {
 				alterarStatus(id);
 				break;
 			case 4:
-				opcoesListar();
+				listarUsuarios();
 				break;
 			default:
 				break;
@@ -149,6 +158,29 @@ public class UsuarioMenu {
 				opcoesListar();
 				break;
 		}
+	}
+
+	private void opcoesListarV2(){
+		System.out.println("\nI - Adicionar usuário\nID - Editar/Ativar/Desativar usuario\n0 - Voltar para o inicio");
+		String opcao = SCANNER.nextLine();
+
+		if(opcao.equalsIgnoreCase("i")){
+			cadastrar();
+			return;
+		}
+
+		if(opcao.equals("0")){
+			return;
+		}
+
+		if (isNumeric(opcao)) {
+			Long id = Long.parseLong(opcao);
+			opcoesAlteracaoUsuario(id);
+			return;
+		}
+
+		System.out.println("Opção inválida.");
+		opcoesListarV2();
 	}
 
 	private void cadastrar() {
@@ -209,7 +241,7 @@ public class UsuarioMenu {
 				System.out.println(usuario.toString2());
 			}
 		}
-		opcoesListar();
+		opcoesListarV2();
 	}
 
 	private void listarUsuarioSelecionado(Long id) {
@@ -347,5 +379,14 @@ public class UsuarioMenu {
 
 	private boolean isAdministrador(){
 		return session.getUsuario().getGrupo() == Grupo.ADMINISTRADOR;
+	}
+
+	public static boolean isNumeric(String str) {
+		try {
+			Integer.parseInt(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 }
