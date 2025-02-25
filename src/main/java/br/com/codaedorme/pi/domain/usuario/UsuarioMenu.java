@@ -229,7 +229,8 @@ public class UsuarioMenu {
 			System.out.println("Usuario nao encontrado!");
 		}
 
-		/*System.out.println("Digite a senha antiga:");
+		/*
+		System.out.println("Digite a senha antiga:");
 		String senhaAntiga = SCANNER.next();
 
 		if (!validador.validaHash(senhaAntiga, usuario.getId())) {

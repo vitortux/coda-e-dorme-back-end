@@ -96,7 +96,7 @@ public class Usuario {
 
 	public String toString() {
 		return id + " | " + nome + " | " + email +
-				" | " + cpf + " | " + senha + " | " + grupo +
+				" | " + cpf + " | "  + grupo +
 				" | " + status;
 	}
 
