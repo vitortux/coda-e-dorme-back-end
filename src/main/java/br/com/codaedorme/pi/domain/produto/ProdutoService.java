@@ -13,5 +13,10 @@ public class ProdutoService {
         return repository.save(produto);
     }
 
+    public Produto[] findAll() {
+        return repository.findAll().toArray(new Produto[0]);
+    }
+
+
 
 }

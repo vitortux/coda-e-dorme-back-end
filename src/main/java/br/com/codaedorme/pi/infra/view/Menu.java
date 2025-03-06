@@ -1,5 +1,6 @@
 package br.com.codaedorme.pi.infra.view;
 
+import br.com.codaedorme.pi.domain.produto.ProdutoMenu;
 import br.com.codaedorme.pi.domain.usuario.Session;
 import br.com.codaedorme.pi.domain.usuario.Usuario;
 import br.com.codaedorme.pi.domain.usuario.UsuarioMenu;
@@ -25,6 +26,9 @@ public class Menu {
     @Autowired
     private UsuarioMenu usuarioMenu;
 
+    @Autowired
+    private ProdutoMenu produtoMenu;
+
     public void menu() {
         boolean rodando = true;
         int escolha;
@@ -42,9 +46,9 @@ public class Menu {
 
             switch (escolha) {
                 case 1:
-                    //ListarProdutos
+                    produtoMenu.listarProdutos();
+                    break;
                 case 2:
-                    usuarioMenu.setSession(session);
                     usuarioMenu.listarUsuarios();
                     break;
                 case 3:
@@ -100,6 +104,8 @@ public class Menu {
         if (usuario.isPresent() && usuario.get().getStatus() == Status.ATIVO) {
             System.out.println("\nLogin bem-sucedido! Bem vindo " + usuario.get().getNome());
             session.setUsuario(usuario.get());
+            usuarioMenu.setSession(session);
+            produtoMenu.setSession(session);
             menu();
             return;
         }
