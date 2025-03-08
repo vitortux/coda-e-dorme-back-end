@@ -1,9 +1,10 @@
 package br.com.codaedorme.pi.domain.produto;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Produto")
@@ -27,6 +28,9 @@ public class Produto {
 
     @Column(nullable = false)
     private Integer quantidadeEstoque;
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Imagem> imagens = new ArrayList<>();
 
     public String getNome() {
         return nome;
@@ -52,6 +56,10 @@ public class Produto {
         this.avaliacao = avaliacao;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getDescricao() {
         return descricao;
     }
@@ -74,6 +82,18 @@ public class Produto {
 
     public void setQuantidadeEstoque(Integer quantidadeEstoque) {
         this.quantidadeEstoque = quantidadeEstoque;
+    }
+
+    public List<Imagem> getImagens() {
+        return imagens;
+    }
+
+    public void setImagens(List<Imagem> imagens) {
+        this.imagens = imagens;
+    }
+
+    public void addImagem(Imagem imagem) {
+        this.imagens.add(imagem);
     }
 
     @Override

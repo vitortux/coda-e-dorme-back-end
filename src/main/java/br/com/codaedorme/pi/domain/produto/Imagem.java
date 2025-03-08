@@ -1,6 +1,5 @@
-package br.com.codaedorme.pi.domain.imagem;
+package br.com.codaedorme.pi.domain.produto;
 
-import br.com.codaedorme.pi.domain.produto.Produto;
 import jakarta.persistence.*;
 
 @Entity

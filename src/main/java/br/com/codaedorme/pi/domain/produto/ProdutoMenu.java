@@ -1,14 +1,17 @@
 package br.com.codaedorme.pi.domain.produto;
 
 import br.com.codaedorme.pi.domain.usuario.Session;
-import br.com.codaedorme.pi.domain.usuario.Usuario;
 import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
-import br.com.codaedorme.pi.domain.usuario.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import java.util.Scanner;
-
+@Component
 public class ProdutoMenu {
 
     private static final Scanner SCANNER = new Scanner(System.in);
@@ -61,11 +64,19 @@ public class ProdutoMenu {
             System.out.println("Insira a quantidade em estoque do produto:");
             produto.setQuantidadeEstoque(SCANNER.nextInt());
 
-            service.save(produto);
+            Produto produtoSalvo = service.save(produto);
 
-            System.out.println("Produto cadastrado com sucesso!");
-            System.out.println(produto);
+            do {
+                Imagem imagem = cadastrarImagem(produtoSalvo);
+                if (imagem != null) {
+                    imagem.setProduto(produtoSalvo);
+                    produtoSalvo.getImagens().add(imagem);
+                }
 
+                System.out.println("Deseja adicionar mais uma imagem? (S/N)");
+            } while (SCANNER.nextLine().trim().equalsIgnoreCase("S"));
+
+            service.save(produtoSalvo);
         } catch (IllegalArgumentException e) {
             System.out.println("Erro ao cadastrar o produto: " + e.getMessage());
         } catch (Exception e) {
@@ -73,13 +84,85 @@ public class ProdutoMenu {
         }
     }
 
+    private Imagem cadastrarImagem(Produto produtoSalvo) {
+        Imagem imagem = new Imagem();
+
+        SCANNER.nextLine();//eu te odeio scanner eu te odeio aaaaaaaaaaaaaa
+        System.out.println("Digite o nome do arquivo da imagem:");
+        String nomeArquivo = SCANNER.nextLine();
+        imagem.setNome(nomeArquivo);
+
+        System.out.println("Digite o caminho completo da imagem de origem:");
+        Path origem = Path.of(SCANNER.nextLine());
+
+        String extensao = "";
+        String nomeOriginal = origem.getFileName().toString();
+        int pontoIndex = nomeOriginal.lastIndexOf(".");
+        if (pontoIndex != -1) {
+            extensao = nomeOriginal.substring(pontoIndex);
+        }
+
+        Path destinoDiretorio = Path.of("src/main/resources/imagens/" + produtoSalvo.getId());
+        try {
+            Files.createDirectories(destinoDiretorio);
+
+            Path destinoArquivo = destinoDiretorio.resolve(nomeArquivo + extensao);
+
+            Files.copy(origem, destinoArquivo, StandardCopyOption.REPLACE_EXISTING);
+            imagem.setDiretorioDestino(destinoArquivo.toString());
+
+        } catch (IOException e) {
+            System.out.println("Erro ao mover a imagem: " + e.getMessage());
+            return null;
+        }
+
+        System.out.println("Esta é a imagem principal? (S/N)");
+        imagem.setImagemPrincipal(SCANNER.nextLine().trim().equalsIgnoreCase("S"));
+
+        if(imagem.getImagemPrincipal()){
+            for (Imagem img : produtoSalvo.getImagens()) {
+                img.setImagemPrincipal(false);
+            }
+        }
+
+        return imagem;
+    }
 
     private void opcoesListar() {
+        System.out.println("\nI - Incluir produto\nID - Editar/Ativar/Desativar produto\n0 - Voltar para o inicio");
+        String opcao = SCANNER.nextLine();
 
+        if(opcao.equalsIgnoreCase("i")){
+            cadastrar();
+            return;
+        }
+
+        if(opcao.equals("0")){
+            System.out.println("Voltando ao menu...");
+            return;
+        }
+
+        if (isNumeric(opcao)) {
+            Long id = Long.parseLong(opcao);
+            //opcoesAlteracaoProduto(id);
+            return;
+        }
+
+        System.out.println("Opção inválida.");
+        opcoesListar();
     }
 
     private boolean isAdministrador(){
         return session.getUsuario().getGrupo() == Grupo.ADMINISTRADOR;
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
     public void setSession(Session session) {
