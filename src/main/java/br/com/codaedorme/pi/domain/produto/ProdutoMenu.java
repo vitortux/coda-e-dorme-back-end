@@ -120,10 +120,7 @@ public class ProdutoMenu {
         imagem.setImagemPrincipal(SCANNER.nextLine().trim().equalsIgnoreCase("S"));
 
         if(imagem.getImagemPrincipal()){
-            for (Imagem img : produtoSalvo.getImagens()) {
-                img.setImagemPrincipal(false);
-            }
-        }
+            resetarImagensPrincipais(produtoSalvo);        }
 
         return imagem;
     }
@@ -150,6 +147,12 @@ public class ProdutoMenu {
 
         System.out.println("Opção inválida.");
         opcoesListar();
+    }
+
+    private void resetarImagensPrincipais(Produto produto) {
+        for (Imagem img : produto.getImagens()) {
+            img.setImagemPrincipal(false);
+        }
     }
 
     private boolean isAdministrador(){
