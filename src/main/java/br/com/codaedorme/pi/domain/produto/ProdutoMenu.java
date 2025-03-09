@@ -169,7 +169,11 @@ public class ProdutoMenu {
 
             switch (opcao) {
                 case 1:
-                    editarProduto(produto);
+                    if (isAdministrador()) {
+                        editarProduto(produto);
+                    } else {
+                        editarQtdEstoque(produto);
+                    }
                     break;
                 case 2:
                     // listarImagens(produto);
@@ -191,7 +195,24 @@ public class ProdutoMenu {
         }
     }
 
+    private void editarQtdEstoque(Produto produto) {
+        System.out.println("------ Edição ------\n");
+        System.out.println(produto.toString());
+
+        System.out.println("Insira a quantidade em estoque do produto:");
+        produto.setQuantidadeEstoque(SCANNER.nextInt());
+        SCANNER.nextLine();
+
+        System.out.println("Deseja persistir as alterações? (S/N)");
+        if (SCANNER.nextLine().trim().equalsIgnoreCase("S")) {
+            service.save(produto);
+        } else {
+            System.out.println("Alterações descartadas.");
+        }
+    }
+
     private void editarProduto(Produto produto) {
+
         System.out.println("------ Edição ------\n");
 
         System.out.println("Insira o nome do produto:");
