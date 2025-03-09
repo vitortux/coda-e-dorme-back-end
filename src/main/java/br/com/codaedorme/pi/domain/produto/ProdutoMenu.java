@@ -129,6 +129,7 @@ public class ProdutoMenu {
             resetarImagensPrincipais(produtoSalvo);
         }
 
+        System.out.println("Imagem adicionada.");
         return imagem;
     }
 
@@ -176,7 +177,11 @@ public class ProdutoMenu {
                     }
                     break;
                 case 2:
-                    // listarImagens(produto);
+                    if (isAdministrador()) {
+                        listarImagens(produto);
+                    } else {
+                        System.out.println("Apenas ADMs podem listar imagens.");
+                    }
                     break;
                 case 3:
                     alterarStatus(produto);
@@ -193,6 +198,68 @@ public class ProdutoMenu {
         } catch (Exception e) {
             System.out.println("Erro inesperado: " + e.getMessage());
         }
+    }
+
+    private void listarImagens(Produto produtoAtt) {
+        Produto produto = service.findById(produtoAtt.getId());
+        if (produto == null) {
+            System.out.println("Produto não encontrado.");
+            return;
+        }
+
+        System.out.println("------ Lista de Imagens produto " + produto.getId() + " ------");
+        for (Imagem img : produto.getImagens()) {
+            System.out.println("ID: " + img.getId() + " - " + img.toString());
+        }
+
+        System.out.println("ID para remover\n0 para voltar\nI para incluir");
+        String opcao = SCANNER.next();
+        SCANNER.nextLine();
+
+        // if (opcao.equalsIgnoreCase("i")) {
+        // cadastrarImagem(addImagem);
+        // return;
+        // }
+
+        if (opcao.equalsIgnoreCase("i")) {
+            Imagem novaImagem = cadastrarImagem(produto);
+            if (novaImagem != null) {
+                novaImagem.setProduto(produto);
+                produto.getImagens().add(novaImagem);
+                service.save(produto); // Salvar as alterações no produto
+                System.out.println("Imagem adicionada com sucesso!");
+            }
+            return;
+        }
+
+        if (opcao.equals("0")) {
+            System.out.println("Voltando ao menu...");
+            listarProdutos();
+            return;
+        }
+
+        if (isNumeric(opcao)) {
+            Long id = Long.parseLong(opcao);
+            Imagem imagemParaRemover = null;
+            for (Imagem img : produto.getImagens()) {
+                if (img.getId().equals(id)) {
+                    imagemParaRemover = img;
+                    break;
+                }
+            }
+
+            if (imagemParaRemover != null) {
+                produto.getImagens().remove(imagemParaRemover);
+                System.out.println("Imagem removida com sucesso!");
+                service.save(produto); // Salvar as alterações no produto
+            } else {
+                System.out.println("Imagem não encontrada.");
+            }
+        } else {
+            System.out.println("Opção inválida.");
+        }
+
+        listarImagens(produto); // Voltar a listar as imagens após a operação
     }
 
     private void editarQtdEstoque(Produto produto) {
