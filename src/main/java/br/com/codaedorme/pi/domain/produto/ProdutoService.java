@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.codaedorme.pi.domain.produto.enums.Status;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ProdutoService {
@@ -17,6 +18,15 @@ public class ProdutoService {
 
     public Produto findById(Long id) {
         return repository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public Produto findByIdImagem(Long id) {
+        Produto produto = repository.findById(id).orElse(null);
+        if (produto != null) {
+            produto.getImagens().size();
+        }
+        return produto;
     }
 
     public Produto[] findAll() {
