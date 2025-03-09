@@ -201,7 +201,7 @@ public class ProdutoMenu {
     }
 
     private void listarImagens(Produto produtoAtt) {
-        Produto produto = service.findByIdImagem(produtoAtt.getId());
+        Produto produto = service.findById(produtoAtt.getId());
         if (produto == null) {
             System.out.println("Produto não encontrado.");
             return;

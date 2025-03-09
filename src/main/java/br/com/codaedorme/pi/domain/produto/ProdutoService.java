@@ -20,15 +20,6 @@ public class ProdutoService {
         return repository.findById(id).orElse(null);
     }
 
-    @Transactional
-    public Produto findByIdImagem(Long id) {
-        Produto produto = repository.findById(id).orElse(null);
-        if (produto != null) {
-            produto.getImagens().size();
-        }
-        return produto;
-    }
-
     public Produto[] findAll() {
         return repository.findAll().toArray(new Produto[0]);
     }
