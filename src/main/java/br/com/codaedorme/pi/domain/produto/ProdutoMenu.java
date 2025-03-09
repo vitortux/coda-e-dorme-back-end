@@ -1,16 +1,19 @@
 package br.com.codaedorme.pi.domain.produto;
 
-import br.com.codaedorme.pi.domain.usuario.Session;
-import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-
 import java.util.Scanner;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.codaedorme.pi.domain.produto.enums.Status;
+import br.com.codaedorme.pi.domain.usuario.Session;
+import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
+
 @Component
 public class ProdutoMenu {
 
@@ -30,10 +33,11 @@ public class ProdutoMenu {
         if (produtos.length == 0) {
             System.out.println("Nenhum produto cadastrado.");
         } else {
-            for (Produto produto : produtos) {
-                System.out.println(produto.toString());
+            for (int i = produtos.length - 1; i >= 0; i--) {
+                System.out.println(produtos[i]);
             }
         }
+
         opcoesListar();
     }
 
@@ -52,17 +56,19 @@ public class ProdutoMenu {
 
             System.out.println("Insira a avaliação do produto (entre 1 e 5, com incrementos de 0.5):");
             produto.setAvaliacao(SCANNER.nextBigDecimal());
-            SCANNER.nextLine();//eu te odeio scanner eu te odeio aaaaaaaaaaaaaa
+            SCANNER.nextLine();// eu te odeio scanner eu te odeio aaaaaaaaaaaaaa
 
             System.out.println("Insira a descrição do produto:");
             produto.setDescricao(SCANNER.nextLine());
 
             System.out.println("Insira o preço do produto:");
             produto.setPreco(SCANNER.nextBigDecimal());
-            SCANNER.nextLine();//eu te odeio scanner eu te odeio aaaaaaaaaaaaaa
+            SCANNER.nextLine();// eu te odeio scanner eu te odeio aaaaaaaaaaaaaa
 
             System.out.println("Insira a quantidade em estoque do produto:");
             produto.setQuantidadeEstoque(SCANNER.nextInt());
+
+            produto.setStatus(Status.ATIVO);
 
             Produto produtoSalvo = service.save(produto);
 
@@ -87,7 +93,7 @@ public class ProdutoMenu {
     private Imagem cadastrarImagem(Produto produtoSalvo) {
         Imagem imagem = new Imagem();
 
-        SCANNER.nextLine();//eu te odeio scanner eu te odeio aaaaaaaaaaaaaa
+        SCANNER.nextLine();// eu te odeio scanner eu te odeio aaaaaaaaaaaaaa
         System.out.println("Digite o nome do arquivo da imagem:");
         String nomeArquivo = SCANNER.nextLine();
         imagem.setNome(nomeArquivo);
@@ -119,8 +125,9 @@ public class ProdutoMenu {
         System.out.println("Esta é a imagem principal? (S/N)");
         imagem.setImagemPrincipal(SCANNER.nextLine().trim().equalsIgnoreCase("S"));
 
-        if(imagem.getImagemPrincipal()){
-            resetarImagensPrincipais(produtoSalvo);        }
+        if (imagem.getImagemPrincipal()) {
+            resetarImagensPrincipais(produtoSalvo);
+        }
 
         return imagem;
     }
@@ -129,24 +136,115 @@ public class ProdutoMenu {
         System.out.println("\nI - Incluir produto\nID - Editar/Ativar/Desativar produto\n0 - Voltar para o inicio");
         String opcao = SCANNER.nextLine();
 
-        if(opcao.equalsIgnoreCase("i")){
+        if (opcao.equalsIgnoreCase("i")) {
             cadastrar();
             return;
         }
 
-        if(opcao.equals("0")){
+        if (opcao.equals("0")) {
             System.out.println("Voltando ao menu...");
             return;
         }
 
         if (isNumeric(opcao)) {
             Long id = Long.parseLong(opcao);
-            //opcoesAlteracaoProduto(id);
+            opcoesAlteracaoProduto(id);
             return;
         }
 
         System.out.println("Opção inválida.");
         opcoesListar();
+    }
+
+    private void opcoesAlteracaoProduto(Long id) {
+        try {
+            Produto produto = service.findById(id);
+            System.out.println(produto.toString());
+
+            System.out.println(
+                    "1 - Editar produto\n2 - Lista de imagens p/ alteração\n3 - Ativar ou desativar produto\n0 - Voltar para o inicio");
+
+            int opcao = SCANNER.nextInt();
+            SCANNER.nextLine();
+
+            switch (opcao) {
+                case 1:
+                    editarProduto(produto);
+                    break;
+                case 2:
+                    // listarImagens(produto);
+                    break;
+                case 3:
+                    alterarStatus(produto);
+                    break;
+                case 0:
+                    System.out.println("Voltando ao menu...");
+                    break;
+                default:
+                    System.out.println("Opção inválida.");
+                    opcoesAlteracaoProduto(id);
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Produto não encontrado.");
+        } catch (Exception e) {
+            System.out.println("Erro inesperado: " + e.getMessage());
+        }
+    }
+
+    private void editarProduto(Produto produto) {
+        System.out.println("------ Edição ------\n");
+
+        System.out.println("Insira o nome do produto:");
+        produto.setNome(SCANNER.nextLine());
+
+        System.out.println("Insira o preço do produto:");
+        produto.setPreco(SCANNER.nextBigDecimal());
+        SCANNER.nextLine();
+
+        System.out.println("Insira a quantidade em estoque do produto:");
+        produto.setQuantidadeEstoque(SCANNER.nextInt());
+        SCANNER.nextLine();
+
+        System.out.println("Insira a descrição do produto:");
+        produto.setDescricao(SCANNER.nextLine());
+
+        System.out.println("Insira a avaliação do produto (entre 1 e 5, com incrementos de 0.5):");
+        produto.setAvaliacao(SCANNER.nextBigDecimal());
+        SCANNER.nextLine();
+
+        System.out.println("Deseja persistir as alterações? (S/N)");
+        if (SCANNER.nextLine().trim().equalsIgnoreCase("S")) {
+            service.save(produto);
+        } else {
+            System.out.println("Alterações descartadas.");
+        }
+    }
+
+    private void alterarStatus(Produto produto) {
+        try {
+            System.out.println(produto.toString());
+
+            String mensagem = produto.getStatus().equals(Status.ATIVO)
+                    ? "Deseja desativar o produto? (Y/N)"
+                    : "Deseja ativar o produto? (Y/N)";
+
+            System.out.println(mensagem);
+            String confirmacao = SCANNER.nextLine();
+
+            if (confirmacao.equalsIgnoreCase("Y")) {
+                service.alterarStatus(produto);
+                System.out.println("Status alterado com sucesso!");
+            } else if (!confirmacao.equalsIgnoreCase("N")) {
+                System.out.println("Opção inválida!");
+            } else {
+                System.out.println("Status não alterado!");
+                opcoesAlteracaoProduto(produto.getId());
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Usuario não encontrado!");
+        } catch (Exception e) {
+            System.out.println("Erro inesperado: " + e.getMessage());
+        }
     }
 
     private void resetarImagensPrincipais(Produto produto) {
@@ -155,7 +253,7 @@ public class ProdutoMenu {
         }
     }
 
-    private boolean isAdministrador(){
+    private boolean isAdministrador() {
         return session.getUsuario().getGrupo() == Grupo.ADMINISTRADOR;
     }
 

@@ -11,6 +11,4 @@ public interface ProdutoRepository extends JpaRepository<Produto, Long> {
 
     @Override
     Page<Produto> findAll(Pageable pageable);
-
-
 }

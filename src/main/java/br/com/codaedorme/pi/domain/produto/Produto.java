@@ -1,10 +1,20 @@
 package br.com.codaedorme.pi.domain.produto;
 
-import jakarta.persistence.*;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import br.com.codaedorme.pi.domain.produto.enums.Status;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Produto")
@@ -31,6 +41,10 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Imagem> imagens = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
 
     public String getNome() {
         return nome;
@@ -96,13 +110,17 @@ public class Produto {
         this.imagens.add(imagem);
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
-        return  id +
-                " | " + nome +
-                " | " + avaliacao +
-                " | " + descricao +
-                " | " + preco +
-                " | " + quantidadeEstoque;
+        return "Produto [id=" + id + ", nome=" + nome + ", quantidadeEstoque=" + quantidadeEstoque + ", preco=" + preco
+                + ", status=" + status + "]";
     }
 }

@@ -20,5 +20,4 @@ public class PiApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		menu.inicio();
 	}
-
 }
