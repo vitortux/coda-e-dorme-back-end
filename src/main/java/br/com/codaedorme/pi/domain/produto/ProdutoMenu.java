@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import br.com.codaedorme.pi.domain.produto.enums.Status;
 import br.com.codaedorme.pi.domain.usuario.Session;
 import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
+import jakarta.transaction.Transactional;
 
 @Component
 public class ProdutoMenu {
@@ -28,22 +29,25 @@ public class ProdutoMenu {
 		System.out.println("------ Lista de Produtos ------");
 
 		Produto[] produtos = service.findAll();
-
-		if (produtos.length == 0) {
-			System.out.println("Nenhum produto cadastrado.");
+		if (isAdministrador()) {
+			if (produtos.length == 0) {
+				System.out.println("Nenhum produto cadastrado.");
+			} else {
+				for (int i = produtos.length - 1; i >= 0; i--) {
+					System.out.println(produtos[i]);
+				}
+			}
+			opcoesListar();
 		} else {
+			opcoesListarEstoquista();
 			for (int i = produtos.length - 1; i >= 0; i--) {
 				System.out.println(produtos[i]);
 			}
 		}
 
-		if (!isAdministrador()) {
-			opcoesListarEstoquista();
-		} else {
-			opcoesListar();
-		}
 	}
 
+	@Transactional
 	private void cadastrar() {
 		if (!isAdministrador()) {
 			System.out.println("Apenas ADMs podem cadastrar produtos.");
@@ -76,16 +80,18 @@ public class ProdutoMenu {
 			Produto produtoSalvo = service.save(produto);
 
 			do {
-				Imagem imagem = cadastrarImagem(produtoSalvo);
+				Imagem imagem = cadastrarImagem(produto);
 				if (imagem != null) {
 					imagem.setProduto(produtoSalvo);
 					produtoSalvo.getImagens().add(imagem);
+					System.out.println(produtoSalvo.getImagens().toString());
 				}
 
 				System.out.println("Deseja adicionar mais uma imagem? (S/N)");
 			} while (SCANNER.nextLine().trim().equalsIgnoreCase("S"));
 
-			service.save(produtoSalvo);
+			System.out.println(produtoSalvo.getImagens().toString());
+			System.out.println(service.save(produtoSalvo).getImagens().toString());
 		} catch (IllegalArgumentException e) {
 			System.out.println("Erro ao cadastrar o produto: " + e.getMessage());
 		} catch (Exception e) {
@@ -191,29 +197,29 @@ public class ProdutoMenu {
 			SCANNER.nextLine();
 
 			switch (opcao) {
-			case 1:
-				if (isAdministrador()) {
-					editarProduto(produto);
-				} else {
-					editarQtdEstoque(produto);
-				}
-				break;
-			case 2:
-				if (isAdministrador()) {
-					listarImagens(produto);
-				} else {
-					System.out.println("Apenas ADMs podem listar imagens.");
-				}
-				break;
-			case 3:
-				alterarStatus(produto);
-				break;
-			case 0:
-				System.out.println("Voltando ao menu...");
-				break;
-			default:
-				System.out.println("Opção inválida.");
-				opcoesAlteracaoProduto(id);
+				case 1:
+					if (isAdministrador()) {
+						editarProduto(produto);
+					} else {
+						editarQtdEstoque(produto);
+					}
+					break;
+				case 2:
+					if (isAdministrador()) {
+						listarImagens(produto);
+					} else {
+						System.out.println("Apenas ADMs podem listar imagens.");
+					}
+					break;
+				case 3:
+					alterarStatus(produto);
+					break;
+				case 0:
+					System.out.println("Voltando ao menu...");
+					break;
+				default:
+					System.out.println("Opção inválida.");
+					opcoesAlteracaoProduto(id);
 			}
 		} catch (NullPointerException e) {
 			System.out.println("Produto não encontrado.");
@@ -223,7 +229,7 @@ public class ProdutoMenu {
 	}
 
 	private void listarImagens(Produto produtoAtt) {
-		Produto produto = service.findById(produtoAtt.getId());
+		Produto produto = service.findByIdComImagens(produtoAtt.getId());
 		if (produto == null) {
 			System.out.println("Produto não encontrado.");
 			return;
@@ -246,7 +252,7 @@ public class ProdutoMenu {
 		if (opcao.equalsIgnoreCase("i")) {
 			Imagem novaImagem = cadastrarImagem(produto);
 			if (novaImagem != null) {
-				novaImagem.setProduto(produto);
+				// novaImagem.setProduto(produto);
 				produto.getImagens().add(novaImagem);
 				service.save(produto); // Salvar as alterações no produto
 				System.out.println("Imagem adicionada com sucesso!");
