@@ -1,73 +1,89 @@
 package br.com.codaedorme.pi.domain.produto;
 
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Imagem")
 public class Imagem {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column(length = 255, nullable = false)
-    private String nome;
+	@Column(length = 255, nullable = false)
+	private String nome;
 
-    @Column(length = 255, nullable = false)
-    private String diretorioDestino;
+	@Column(length = 255, nullable = false)
+	private String diretorioDestino;
 
-    @ManyToOne
-    @JoinColumn(name = "produtoId", nullable = false)
-    private Produto produto;
+	@Column(nullable = false)
+	private Boolean imagemPrincipal;
 
-    @Column(nullable = false)
-    private Boolean imagemPrincipal;
+	@ManyToOne
+	@JoinColumn(name = "produto_id")
+	@JsonBackReference
+	private Produto produto;
 
-    public Long getId() {
-        return id;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public String getDiretorioDestino() {
-        return diretorioDestino;
-    }
+	public String getDiretorioDestino() {
+		return diretorioDestino;
+	}
 
-    public void setDiretorioDestino(String diretorioDestino) {
-        this.diretorioDestino = diretorioDestino;
-    }
+	public void setDiretorioDestino(String diretorioDestino) {
+		this.diretorioDestino = diretorioDestino;
+	}
 
-    public Produto getProduto() {
-        return produto;
-    }
+	public Boolean getImagemPrincipal() {
+		return imagemPrincipal;
+	}
 
-    public void setProduto(Produto produto) {
-        this.produto = produto;
-    }
+	public void setImagemPrincipal(Boolean imagemPrincipal) {
+		this.imagemPrincipal = imagemPrincipal;
+	}
 
-    public Boolean getImagemPrincipal() {
-        return imagemPrincipal;
-    }
+	public Produto getProduto() {
+		return produto;
+	}
 
-    public void setImagemPrincipal(Boolean imagemPrincipal) {
-        this.imagemPrincipal = imagemPrincipal;
-    }
+	public void setProduto(Produto produto) {
+		this.produto = produto;
+	}
 
-    @Override
-    public String toString() {
-        return "Imagem ID: " + id +
-                " | Nome: " + nome +
-                " | Diretorio Destino: " + diretorioDestino +
-                " | Imagem Principal: " + imagemPrincipal;
-    }
+	// @Override
+	// public String toString() {
+	// return "Imagem ID: " + id + " | Nome: " + nome + " | Diretorio Destino: " +
+	// diretorioDestino
+	// + " | Imagem Principal: " + imagemPrincipal + " | Id do produto: " +
+	// produto.getId();
+	// }
+
+	@Override
+	public String toString() {
+		return "Imagem ID: " + id + " | Nome: " + nome + " | Diretorio Destino: " + diretorioDestino
+				+ " | Imagem Principal: " + imagemPrincipal;
+	}
 }
