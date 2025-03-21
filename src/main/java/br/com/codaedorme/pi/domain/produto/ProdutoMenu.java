@@ -197,29 +197,29 @@ public class ProdutoMenu {
 			SCANNER.nextLine();
 
 			switch (opcao) {
-			case 1:
-				if (isAdministrador()) {
-					editarProduto(produto);
-				} else {
-					editarQtdEstoque(produto);
-				}
-				break;
-			case 2:
-				if (isAdministrador()) {
-					listarImagens(produto);
-				} else {
-					System.out.println("Apenas ADMs podem listar imagens.");
-				}
-				break;
-			case 3:
-				alterarStatus(produto);
-				break;
-			case 0:
-				System.out.println("Voltando ao menu...");
-				break;
-			default:
-				System.out.println("Opção inválida.");
-				opcoesAlteracaoProduto(id);
+				case 1:
+					if (isAdministrador()) {
+						editarProduto(produto);
+					} else {
+						editarQtdEstoque(produto);
+					}
+					break;
+				case 2:
+					if (isAdministrador()) {
+						listarImagens(produto);
+					} else {
+						System.out.println("Apenas ADMs podem listar imagens.");
+					}
+					break;
+				case 3:
+					alterarStatus(produto);
+					break;
+				case 0:
+					System.out.println("Voltando ao menu...");
+					break;
+				default:
+					System.out.println("Opção inválida.");
+					opcoesAlteracaoProduto(id);
 			}
 		} catch (NullPointerException e) {
 			System.out.println("Produto não encontrado.");
@@ -229,7 +229,7 @@ public class ProdutoMenu {
 	}
 
 	private void listarImagens(Produto produtoAtt) {
-		Produto produto = service.findById(produtoAtt.getId());
+		Produto produto = service.findByIdComImagens(produtoAtt.getId());
 		if (produto == null) {
 			System.out.println("Produto não encontrado.");
 			return;
