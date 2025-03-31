@@ -1,13 +1,15 @@
 package br.com.codaedorme.pi.domain.usuario;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.codaedorme.pi.domain.usuario.enums.Status;
 import br.com.codaedorme.pi.infra.criptografia.CriptografaSenha;
 import br.com.codaedorme.pi.infra.validation.ValidaSenha;
-
-import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -42,6 +44,10 @@ public class UsuarioService {
 
 	public Usuario[] findAll() {
 		return repository.findAll().toArray(new Usuario[0]);
+	}
+
+	public Page<Usuario> findAll(Pageable pageable) {
+		return repository.findAll(pageable);
 	}
 
 	public Usuario alter(Usuario usuario) {
