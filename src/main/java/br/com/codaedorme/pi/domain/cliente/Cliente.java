@@ -12,7 +12,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -41,7 +43,11 @@ public class Cliente {
 
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
-	private List<Endereco> enderecos;
+	private List<Endereco> enderecoEntrega;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "endereco_faturamento_id")
+	private Endereco enderecoFaturamento;
 
 	public Long getId() {
 		return id;
@@ -91,18 +97,27 @@ public class Cliente {
 		this.genero = genero;
 	}
 
-	public List<Endereco> getEnderecos() {
-		return enderecos;
+	public List<Endereco> getEnderecoEntrega() {
+		return enderecoEntrega;
 	}
 
-	public void setEnderecos(List<Endereco> enderecos) {
-		this.enderecos = enderecos;
+	public void setEnderecoEntrega(List<Endereco> enderecoEntrega) {
+		this.enderecoEntrega = enderecoEntrega;
+	}
+
+	public Endereco getEnderecoFaturamento() {
+		return enderecoFaturamento;
+	}
+
+	public void setEnderecoFaturamento(Endereco enderecoFaturamento) {
+		this.enderecoFaturamento = enderecoFaturamento;
 	}
 
 	@Override
 	public String toString() {
 		return "Cliente [id=" + id + ", email=" + email + ", cpf=" + cpf + ", nomeCompleto=" + nomeCompleto
-				+ ", dataNascimento=" + dataNascimento + ", genero=" + genero + ", enderecos=" + enderecos + "]";
+				+ ", dataNascimento=" + dataNascimento + ", genero=" + genero + ", enderecoEntrega=" + enderecoEntrega
+				+ ", enderecoFaturamento=" + enderecoFaturamento + "]";
 	}
 
 }
