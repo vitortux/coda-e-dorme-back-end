@@ -141,13 +141,6 @@ public class Cliente implements UserDetails {
 	}
 
 	@Override
-	public String toString() {
-		return "Cliente [id=" + id + ", email=" + email + ", cpf=" + cpf + ", nomeCompleto=" + nomeCompleto
-				+ ", dataNascimento=" + dataNascimento + ", genero=" + genero + ", enderecoEntrega=" + enderecoEntrega
-				+ ", enderecoFaturamento=" + enderecoFaturamento + "]";
-	}
-
-	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		if (this.role == UserRole.ADMIN)
 			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
