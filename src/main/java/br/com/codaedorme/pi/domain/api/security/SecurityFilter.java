@@ -1,4 +1,4 @@
-package br.com.codaedorme.pi.infra.security;
+package br.com.codaedorme.pi.domain.api.security;
 
 import java.io.IOException;
 

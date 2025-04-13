@@ -1,4 +1,4 @@
-package br.com.codaedorme.pi.infra.security;
+package br.com.codaedorme.pi.domain.api.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

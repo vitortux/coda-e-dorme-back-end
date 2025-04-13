@@ -14,7 +14,7 @@ import br.com.codaedorme.pi.domain.api.cliente.AuthenticationDTO;
 import br.com.codaedorme.pi.domain.api.cliente.Cliente;
 import br.com.codaedorme.pi.domain.api.cliente.ClienteRepository;
 import br.com.codaedorme.pi.domain.api.cliente.LoginResponseDTO;
-import br.com.codaedorme.pi.infra.security.TokenService;
+import br.com.codaedorme.pi.domain.api.security.TokenService;
 import jakarta.validation.Valid;
 
 @RestController
@@ -36,7 +36,6 @@ public class AuthenticationController {
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((Cliente) auth.getPrincipal());
-        System.out.println(token);
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
