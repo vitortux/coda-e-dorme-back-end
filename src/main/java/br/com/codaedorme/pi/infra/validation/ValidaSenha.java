@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
-import br.com.codaedorme.pi.domain.usuario.Usuario;
-import br.com.codaedorme.pi.domain.usuario.UsuarioRepository;
+import br.com.codaedorme.pi.domain.cli.usuario.Usuario;
+import br.com.codaedorme.pi.domain.cli.usuario.UsuarioRepository;
 
 @Service
 public class ValidaSenha {
