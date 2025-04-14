@@ -40,6 +40,9 @@ public class Endereco {
 	@Column(nullable = false, length = 8)
 	private String cep;
 
+	@Column(nullable = false)
+	private boolean padrao = false;
+
 	@ManyToOne
 	@JoinColumn(name = "cliente_id")
 	@JsonBackReference
@@ -115,5 +118,27 @@ public class Endereco {
 
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+
+	public boolean isPadrao() {
+		return padrao;
+	}
+
+	public void setPadrao(boolean padrao) {
+		this.padrao = padrao;
+	}
+
+	public Endereco fromDTO(EnderecoDTO dto, Cliente cliente) {
+		Endereco endereco = new Endereco();
+		endereco.setLogradouro(dto.logradouro());
+		endereco.setNumero(dto.numero());
+		endereco.setComplemento(dto.complemento());
+		endereco.setBairro(dto.bairro());
+		endereco.setCidade(dto.cidade());
+		endereco.setEstado(dto.estado());
+		endereco.setCep(dto.cep());
+		endereco.setPadrao(Boolean.TRUE.equals(dto.padrao()));
+		endereco.setCliente(cliente);
+		return endereco;
 	}
 }

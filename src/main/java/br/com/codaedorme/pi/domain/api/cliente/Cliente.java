@@ -50,7 +50,7 @@ public class Cliente implements UserDetails {
 	@Column(nullable = false)
 	private String genero;
 
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Endereco> enderecoEntrega;
 
