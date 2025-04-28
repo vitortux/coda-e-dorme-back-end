@@ -6,13 +6,13 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.codaedorme.pi.domain.produto.ProdutoMenu;
-import br.com.codaedorme.pi.domain.usuario.Session;
-import br.com.codaedorme.pi.domain.usuario.Usuario;
-import br.com.codaedorme.pi.domain.usuario.UsuarioMenu;
-import br.com.codaedorme.pi.domain.usuario.UsuarioService;
-import br.com.codaedorme.pi.domain.usuario.enums.Grupo;
-import br.com.codaedorme.pi.domain.usuario.enums.Status;
+import br.com.codaedorme.pi.domain.cli.produto.ProdutoMenu;
+import br.com.codaedorme.pi.domain.cli.usuario.Session;
+import br.com.codaedorme.pi.domain.cli.usuario.Usuario;
+import br.com.codaedorme.pi.domain.cli.usuario.UsuarioMenu;
+import br.com.codaedorme.pi.domain.cli.usuario.UsuarioService;
+import br.com.codaedorme.pi.domain.cli.usuario.enums.Grupo;
+import br.com.codaedorme.pi.domain.cli.usuario.enums.Status;
 
 @Component
 public class Menu {
