@@ -73,4 +73,12 @@ public class ClienteService {
 
         repository.save(cliente);
     }
+
+    public void addEndereco(Cliente cliente, Endereco endereco) {
+        endereco.setCliente(cliente);
+
+        cliente.getEnderecoEntrega().add(endereco);
+
+        repository.save(cliente);
+    }
 }

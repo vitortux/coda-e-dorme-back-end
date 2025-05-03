@@ -36,6 +36,10 @@ public class PedidoService {
         pedidoRepository.delete(pedidoExistente);
     }
 
+    public List<Pedido> listarPedidosPorUsuarioId(Long usuarioId) {
+        return pedidoRepository.findAllByIdCliente(usuarioId);
+    }
+
     public List<Pedido> listarTodosOsPedidos() {
         return pedidoRepository.findAll();
     }
