@@ -3,7 +3,7 @@ package br.com.codaedorme.pi.domain.api.pedido;
 public enum FormaDePagamento {
 
     CARTAO("Cartão"),
-    PIX("Pix");
+    BOLETO("Boleto");
 
     private String tipo;
 

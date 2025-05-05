@@ -1,6 +1,8 @@
 package br.com.codaedorme.pi.domain.api.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,13 +38,17 @@ public class PedidoController {
     public ResponseEntity<?> addPedido(@RequestBody Pedido pedido) {
         try {
             List<ItemPedido> itensPedido = pedido.getItensPedido();
+            Pedido pedidoSalvo = service.addPedido(pedido, itensPedido);
 
-            service.addPedido(pedido, itensPedido);
+            Map<String, Object> resposta = new HashMap<>();
+            resposta.put("mensagem", "Pedido adicionado com sucesso.");
+            resposta.put("idPedido", pedidoSalvo.getId());
+            resposta.put("valorTotal", pedidoSalvo.getValorTotalPedido());
 
-            return ResponseEntity.ok("Pedido adicionado com sucesso");
+            return ResponseEntity.ok(resposta);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Erro ao adicionar pedido: " + e.getMessage());
+                    .body(Map.of("mensagem", "Erro ao adicionar pedido: " + e.getMessage()));
         }
     }
 

@@ -34,11 +34,11 @@ public class PedidoService {
     }
 
     @Transactional
-    public void addPedido(Pedido pedido, List<ItemPedido> itensPedido) {
+    public Pedido addPedido(Pedido pedido, List<ItemPedido> itensPedido) {
         for (ItemPedido item : itensPedido) {
             itemPedidoRepository.save(item);
         }
-        pedidoRepository.save(pedido);
+        return pedidoRepository.save(pedido);
     }
 
     public void deletarPedido(Long id) {
@@ -62,6 +62,7 @@ public class PedidoService {
                             .map(item -> {
                                 Produto produto = produtoRepository.findById(item.getIdProduto()).get();
                                 return new ItemPedidoDTO(
+                                        item.getIdItemPedido(),
                                         produto,
                                         item.getQtdProduto(),
                                         item.getValorUnitario(),
@@ -70,13 +71,14 @@ public class PedidoService {
                             .collect(Collectors.toList());
 
                     return new PedidoDTO(
+                            pedido.getId(),
                             endereco,
                             itensDTO,
                             pedido.getDataPedido(),
                             pedido.getValorFrete(),
                             pedido.getFormaDePagamento(),
                             pedido.getValorTotalPedido(),
-                            pedido.isStatusPedido());
+                            pedido.getStatusPedido());
                 })
                 .collect(Collectors.toList());
     }

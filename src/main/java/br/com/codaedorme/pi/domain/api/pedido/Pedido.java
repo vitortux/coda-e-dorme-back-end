@@ -1,12 +1,14 @@
 package br.com.codaedorme.pi.domain.api.pedido;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,7 +38,7 @@ public class Pedido {
     private List<ItemPedido> itensPedido;
 
     @Column(nullable = false)
-    private String dataPedido;
+    private LocalDateTime dataPedido = LocalDateTime.now();
 
     @Column(nullable = false)
     private double valorFrete;
@@ -48,7 +50,8 @@ public class Pedido {
     private double valorTotalPedido;
 
     @Column(nullable = false)
-    private boolean statusPedido;
+    @Enumerated(EnumType.STRING)
+    private StatusPedido statusPedido;
 
     public Long getId() {
         return id;
@@ -58,11 +61,11 @@ public class Pedido {
         this.id = id;
     }
 
-    public String getDataPedido() {
+    public LocalDateTime getDataPedido() {
         return dataPedido;
     }
 
-    public void setDataPedido(String dataPedido) {
+    public void setDataPedido(LocalDateTime dataPedido) {
         this.dataPedido = dataPedido;
     }
 
@@ -106,14 +109,6 @@ public class Pedido {
         this.valorTotalPedido = valorTotalPedido;
     }
 
-    public boolean isStatusPedido() {
-        return statusPedido;
-    }
-
-    public void setStatusPedido(boolean statusPedido) {
-        this.statusPedido = statusPedido;
-    }
-
     public List<ItemPedido> getItensPedido() {
         return itensPedido;
     }
@@ -122,4 +117,11 @@ public class Pedido {
         this.itensPedido = itensPedido;
     }
 
+    public StatusPedido getStatusPedido() {
+        return statusPedido;
+    }
+
+    public void setStatusPedido(StatusPedido statusPedido) {
+        this.statusPedido = statusPedido;
+    }
 }
