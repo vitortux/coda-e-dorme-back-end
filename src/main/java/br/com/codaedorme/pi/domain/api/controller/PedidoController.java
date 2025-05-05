@@ -46,19 +46,11 @@ public class PedidoController {
         }
     }
 
-    @GetMapping("/me")
-    public ResponseEntity<Cliente> me(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.replace("Bearer ", "");
-        String email = tokenService.validateToken(token);
-        Cliente cliente = (Cliente) servicec.findByEmail(email);
-        return ResponseEntity.ok((cliente));
-    }
-
     @GetMapping("/buscarPedidos")
     public ResponseEntity<?> buscarPedidos(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
         String email = tokenService.validateToken(token);
         Cliente cliente = (Cliente) servicec.findByEmail(email);
-        return ResponseEntity.ok(service.listarPedidosPorUsuarioId(cliente.getId()));
+        return ResponseEntity.ok(service.listarPedidosDTOPorUsuarioId(cliente.getId()));
     }
 }

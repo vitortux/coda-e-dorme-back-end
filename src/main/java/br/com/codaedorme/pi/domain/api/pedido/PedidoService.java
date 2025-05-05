@@ -1,10 +1,15 @@
 package br.com.codaedorme.pi.domain.api.pedido;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.codaedorme.pi.domain.api.endereco.Endereco;
+import br.com.codaedorme.pi.domain.api.endereco.EnderecoRepository;
+import br.com.codaedorme.pi.domain.cli.produto.Produto;
+import br.com.codaedorme.pi.domain.cli.produto.ProdutoRepository;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -15,6 +20,12 @@ public class PedidoService {
 
     @Autowired
     private ItemRepository itemPedidoRepository;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private EnderecoRepository enderecoRepository;
 
     // Construtor com injeção de dependências
     public PedidoService(PedidoRepository pedidoRepository, ItemRepository itemPedidoRepository) {
@@ -40,8 +51,34 @@ public class PedidoService {
         return pedidoRepository.findAllByIdCliente(usuarioId);
     }
 
-    public List<Pedido> listarTodosOsPedidos() {
-        return pedidoRepository.findAll();
+    public List<PedidoDTO> listarPedidosDTOPorUsuarioId(Long usuarioId) {
+        List<Pedido> pedidos = pedidoRepository.findAllByIdCliente(usuarioId);
+
+        return pedidos.stream()
+                .map(pedido -> {
+                    Endereco endereco = enderecoRepository.findById(pedido.getIdEndereco()).get();
+
+                    List<ItemPedidoDTO> itensDTO = pedido.getItensPedido().stream()
+                            .map(item -> {
+                                Produto produto = produtoRepository.findById(item.getIdProduto()).get();
+                                return new ItemPedidoDTO(
+                                        produto,
+                                        item.getQtdProduto(),
+                                        item.getValorUnitario(),
+                                        item.getValorSubTotal());
+                            })
+                            .collect(Collectors.toList());
+
+                    return new PedidoDTO(
+                            endereco,
+                            itensDTO,
+                            pedido.getDataPedido(),
+                            pedido.getValorFrete(),
+                            pedido.getFormaDePagamento(),
+                            pedido.getValorTotalPedido(),
+                            pedido.isStatusPedido());
+                })
+                .collect(Collectors.toList());
     }
 
 }
