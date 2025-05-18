@@ -2,6 +2,7 @@ package br.com.codaedorme.pi.domain.api.cliente.enums;
 
 public enum UserRole {
     ADMIN("admin"),
+    ESTOQUISTA("estoquista"),
     USER("user");
 
     private String role;

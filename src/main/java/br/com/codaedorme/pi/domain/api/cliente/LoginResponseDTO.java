@@ -1,5 +1,5 @@
 package br.com.codaedorme.pi.domain.api.cliente;
 
-public record LoginResponseDTO(String token) {
+public record LoginResponseDTO(String token, Cliente cliente) {
 
 }

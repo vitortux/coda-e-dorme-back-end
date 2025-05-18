@@ -50,7 +50,9 @@ public class Imagem {
 	}
 
 	public String getDiretorioDestino() {
-		return diretorioDestino;
+		String[] partes = this.diretorioDestino.replace("\\", "/").split("/");
+		String nomeArquivo = partes[partes.length - 1];
+		return "/imagens/" + this.produto.getId() + "/" + nomeArquivo;
 	}
 
 	public void setDiretorioDestino(String diretorioDestino) {
