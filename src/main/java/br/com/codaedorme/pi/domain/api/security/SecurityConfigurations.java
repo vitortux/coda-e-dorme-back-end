@@ -39,6 +39,10 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.GET, "/api/produtos").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/produtos/{id}").permitAll()
                         .requestMatchers(HttpMethod.GET, "/imagens/**").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/listarPedidos", "listarPedidos").hasRole("ESTOQUISTA")
+                        .requestMatchers(HttpMethod.PUT, "/listarPedidos/alterarStatus/{id}").hasRole("ESTOQUISTA")
+
                         .anyRequest().authenticated())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

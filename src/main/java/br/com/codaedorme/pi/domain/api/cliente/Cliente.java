@@ -140,12 +140,26 @@ public class Cliente implements UserDetails {
 		this.enderecoFaturamento = enderecoFaturamento;
 	}
 
+	// @Override
+	// public Collection<? extends GrantedAuthority> getAuthorities() {
+	// if (this.role == UserRole.ADMIN)
+	// return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new
+	// SimpleGrantedAuthority("ROLE_USER"));
+	// else
+	// return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+	// }
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		if (this.role == UserRole.ADMIN)
-			return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));
-		else
+		if (this.role == UserRole.ADMIN) {
+			return List.of(
+					new SimpleGrantedAuthority("ROLE_ADMIN"),
+					new SimpleGrantedAuthority("ROLE_USER"));
+		} else if (this.role == UserRole.ESTOQUISTA) {
+			return List.of(new SimpleGrantedAuthority("ROLE_ESTOQUISTA"));
+		} else {
 			return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+		}
 	}
 
 	@Override

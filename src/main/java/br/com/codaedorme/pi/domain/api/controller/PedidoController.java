@@ -8,17 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.codaedorme.pi.domain.api.cliente.Cliente;
 import br.com.codaedorme.pi.domain.api.cliente.ClienteService;
 import br.com.codaedorme.pi.domain.api.pedido.ItemPedido;
 import br.com.codaedorme.pi.domain.api.pedido.Pedido;
+import br.com.codaedorme.pi.domain.api.pedido.PedidoDTO;
 import br.com.codaedorme.pi.domain.api.pedido.PedidoService;
+import br.com.codaedorme.pi.domain.api.pedido.StatusDTO;
+import br.com.codaedorme.pi.domain.api.pedido.StatusPedido;
 import br.com.codaedorme.pi.domain.api.security.TokenService;
 
 @RestController
@@ -51,6 +57,43 @@ public class PedidoController {
                     .body(Map.of("mensagem", "Erro ao adicionar pedido: " + e.getMessage()));
         }
     }
+
+    @GetMapping("/detalhesPedido/{pedidoId}")
+    public ResponseEntity<?> detalhesDoPedido(@RequestHeader("Authorization") String authHeader,
+            @PathVariable Long pedidoId) {
+        String token = authHeader.replace("Bearer", "").trim();
+        String email = tokenService.validateToken(token);
+        Cliente cliente = (Cliente) servicec.findByEmail(email);
+        PedidoDTO pedidoDTO = service.detalhesDoPedidoPorUsuario(cliente.getId(), pedidoId);
+        return ResponseEntity.ok(pedidoDTO);
+    }
+
+    // Methodo para retornar todos os pedidos / alterar status do pedido, apenas se
+    // a role for estoquistA
+    // -------------------------------------------------------------------------------------
+    @GetMapping("/listarPedidos")
+    public ResponseEntity<?> listarPedidos(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String email = tokenService.validateToken(token);
+        Cliente cliente = (Cliente) servicec.findByEmail(email);
+        return ResponseEntity.ok(service.listarTodosPedidosParaEstoquista(cliente.getId()));
+    }
+
+    @PutMapping("/listarPedidos/alterarStatus/{id}")
+    public ResponseEntity<?> alterarStatus(
+            @RequestHeader("Authorization") String authHeader,
+            @PathVariable("id") Long pedidoId, // <- nome da variável alinhado com o path
+            @RequestBody StatusDTO newStatus) { // <- JSON no body, não @RequestParam
+
+        String token = authHeader.replace("Bearer ", "");
+        String email = tokenService.validateToken(token);
+        Cliente cliente = (Cliente) servicec.findByEmail(email);
+
+        Pedido pedidoAtualizado = service.alterarStatus(cliente.getId(), pedidoId, newStatus.getStatusPedido());
+        return ResponseEntity.ok(pedidoAtualizado);
+    }
+
+    // -------------------------------------------------------------------------------------
 
     @GetMapping("/buscarPedidos")
     public ResponseEntity<?> buscarPedidos(@RequestHeader("Authorization") String authHeader) {
