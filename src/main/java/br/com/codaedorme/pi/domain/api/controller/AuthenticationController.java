@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,15 +32,14 @@ public class AuthenticationController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+    public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        var auth = authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((Cliente) auth.getPrincipal());
+        var user = (UserDetails) auth.getPrincipal();
+        var token = tokenService.generateToken(user);
 
-        Cliente cliente = (Cliente) repository.findByEmail(data.email());
-
-        return ResponseEntity.ok(new LoginResponseDTO(token, cliente));
+        return ResponseEntity.ok(new LoginResponseDTO(token, user));
     }
 
     @PostMapping("/register")

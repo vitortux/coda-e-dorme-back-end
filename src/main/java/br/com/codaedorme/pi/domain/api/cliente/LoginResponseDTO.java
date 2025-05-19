@@ -1,5 +1,7 @@
 package br.com.codaedorme.pi.domain.api.cliente;
 
-public record LoginResponseDTO(String token, Cliente cliente) {
+import org.springframework.security.core.userdetails.UserDetails;
+
+public record LoginResponseDTO(String token, UserDetails cliente) {
 
 }

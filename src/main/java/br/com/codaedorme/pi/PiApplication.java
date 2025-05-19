@@ -1,10 +1,11 @@
 package br.com.codaedorme.pi;
 
-import br.com.codaedorme.pi.infra.view.Menu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import br.com.codaedorme.pi.infra.view.Menu;
 
 @SpringBootApplication
 public class PiApplication implements CommandLineRunner {
