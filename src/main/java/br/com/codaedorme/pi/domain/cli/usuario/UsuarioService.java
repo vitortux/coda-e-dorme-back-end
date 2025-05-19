@@ -33,6 +33,10 @@ public class UsuarioService {
 		}
 	}
 
+	public Usuario findByEmail(String email) {
+		return repository.findByEmail(email).get();
+	}
+
 	public Usuario alterarSenha(Usuario usuario, String senhaNova) {
 		usuario.setSenha(crip.criptografar(senhaNova));
 		return repository.save(usuario);

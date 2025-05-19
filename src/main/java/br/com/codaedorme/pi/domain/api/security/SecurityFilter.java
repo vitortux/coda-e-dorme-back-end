@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.com.codaedorme.pi.domain.api.cliente.ClienteRepository;
+import br.com.codaedorme.pi.domain.cli.usuario.UsuarioRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,18 +23,29 @@ public class SecurityFilter extends OncePerRequestFilter {
     TokenService tokenService;
 
     @Autowired
-    ClienteRepository repository;
+    ClienteRepository clienteRepository;
+
+    @Autowired
+    UsuarioRepository usuarioRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         var token = this.recoverToken(request);
+        System.out.println("ASDIHASDHUASHDASDASD: " + token);
         if (token != null) {
             var login = tokenService.validateToken(token);
-            UserDetails user = repository.findByEmail(login);
 
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            UserDetails user = clienteRepository.findByEmail(login);
+            if (user == null) {
+                user = usuarioRepository.findByEmail(login).get();
+            }
+
+            if (user != null) {
+                var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         filterChain.doFilter(request, response);
     }
