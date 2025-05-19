@@ -19,6 +19,7 @@ import br.com.codaedorme.pi.domain.api.cliente.ClienteService;
 import br.com.codaedorme.pi.domain.api.cliente.ClienteUpdateDTO;
 import br.com.codaedorme.pi.domain.api.endereco.Endereco;
 import br.com.codaedorme.pi.domain.api.security.TokenService;
+import br.com.codaedorme.pi.domain.cli.usuario.UsuarioService;
 
 @RestController
 @RequestMapping("/api/clientes")
@@ -28,6 +29,9 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     @GetMapping("/profile")
     public UserDetails getCliente(@RequestParam String email) {
@@ -46,10 +50,13 @@ public class ClienteController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Cliente> me(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<?> me(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer ", "");
         String email = tokenService.validateToken(token); // aqui você recupera o e-mail
-        Cliente cliente = (Cliente) clienteService.findByEmail(email);
+        UserDetails cliente = clienteService.findByEmail(email);
+        if (cliente == null) {
+            cliente = usuarioService.findByEmail(email);
+        }
         return ResponseEntity.ok((cliente));
     }
 
