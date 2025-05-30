@@ -52,5 +52,4 @@ public class AuthenticationController {
         this.repository.save(cliente);
         return ResponseEntity.ok().build();
     }
-
 }

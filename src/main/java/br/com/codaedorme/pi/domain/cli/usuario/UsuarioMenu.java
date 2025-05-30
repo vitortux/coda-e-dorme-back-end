@@ -1,6 +1,5 @@
 package br.com.codaedorme.pi.domain.cli.usuario;
 
-import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;

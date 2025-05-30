@@ -1,16 +1,19 @@
 package br.com.codaedorme.pi.domain.api.cliente.enums;
 
-public enum UserRole {
-    ADMIN("admin"),
-    ESTOQUISTA("estoquista"),
-    USER("user");
+import com.fasterxml.jackson.annotation.JsonValue;
 
-    private String role;
+public enum UserRole {
+    ADMIN("ADMIN"),
+    ESTOQUISTA("ESTOQUISTA"),
+    USER("USER");
+
+    private final String role;
 
     UserRole(String role) {
         this.role = role;
     }
 
+    @JsonValue
     public String getRole() {
         return role;
     }
