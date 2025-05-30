@@ -43,7 +43,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid Cliente cliente) {
+    public ResponseEntity<?> register(@RequestBody @Valid Cliente cliente) {
         if (this.repository.findByEmail(cliente.getEmail()) != null)
             return ResponseEntity.badRequest().build();
         String senhaEncripitada = new BCryptPasswordEncoder().encode(cliente.getSenha());
