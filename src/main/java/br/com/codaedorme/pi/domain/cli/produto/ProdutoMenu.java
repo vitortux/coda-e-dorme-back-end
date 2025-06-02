@@ -252,7 +252,7 @@ public class ProdutoMenu {
 		if (opcao.equalsIgnoreCase("i")) {
 			Imagem novaImagem = cadastrarImagem(produto);
 			if (novaImagem != null) {
-				// novaImagem.setProduto(produto);
+				novaImagem.setProduto(produto);
 				produto.getImagens().add(novaImagem);
 				service.save(produto); // Salvar as alterações no produto
 				System.out.println("Imagem adicionada com sucesso!");

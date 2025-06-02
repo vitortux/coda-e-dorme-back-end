@@ -33,6 +33,12 @@ public class ClienteController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @GetMapping("/teste")
+    public String teste() {
+        String macaco = "oi macaco";
+        return macaco;
+    }
+
     @GetMapping("/profile")
     public UserDetails getCliente(@RequestParam String email) {
         return clienteService.findByEmail(email);

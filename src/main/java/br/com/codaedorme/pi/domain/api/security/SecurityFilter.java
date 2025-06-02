@@ -33,7 +33,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         var token = this.recoverToken(request);
-        System.out.println("ASDIHASDHUASHDASDASD: " + token);
         if (token != null) {
             var login = tokenService.validateToken(token);
 

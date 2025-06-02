@@ -59,16 +59,11 @@ public class PedidoController {
     @GetMapping("/detalhesPedido/{pedidoId}")
     public ResponseEntity<?> detalhesDoPedido(@RequestHeader("Authorization") String authHeader,
             @PathVariable Long pedidoId) {
-        // String token = authHeader.replace("Bearer", "").trim();
-        // String email = tokenService.validateToken(token);
-        // Cliente cliente = (Cliente) servicec.findByEmail(email);
+
         PedidoDTO pedidoDTO = service.detalhesDoPedidoPorUsuario(pedidoId);
         return ResponseEntity.ok(pedidoDTO);
     }
 
-    // Methodo para retornar todos os pedidos / alterar status do pedido, apenas se
-    // a role for estoquistA
-    // -------------------------------------------------------------------------------------
     @GetMapping("/listarPedidos")
     public ResponseEntity<?> listarPedidos(@RequestHeader("Authorization") String authHeader) {
         return ResponseEntity.ok(service.listarTodosPedidosParaEstoquista());
@@ -83,8 +78,6 @@ public class PedidoController {
         Pedido pedidoAtualizado = service.alterarStatus(pedidoId, statusPedidoDTO);
         return ResponseEntity.ok(pedidoAtualizado);
     }
-
-    // -------------------------------------------------------------------------------------
 
     @GetMapping("/buscarPedidos")
     public ResponseEntity<?> buscarPedidos(@RequestHeader("Authorization") String authHeader) {

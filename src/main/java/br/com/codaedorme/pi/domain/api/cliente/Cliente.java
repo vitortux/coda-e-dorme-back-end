@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,6 +16,8 @@ import br.com.codaedorme.pi.domain.api.endereco.Endereco;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,6 +42,7 @@ public class Cliente implements UserDetails {
 	private String senha;
 
 	@Column(nullable = false, unique = true, length = 11)
+	@CPF
 	private String cpf;
 
 	@Column(nullable = false)
@@ -58,6 +62,7 @@ public class Cliente implements UserDetails {
 	@JoinColumn(name = "endereco_faturamento_id")
 	private Endereco enderecoFaturamento;
 
+	@Enumerated(EnumType.STRING)
 	private UserRole role;
 
 	public Long getId() {
